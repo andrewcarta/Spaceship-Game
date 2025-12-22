@@ -753,7 +753,7 @@ Camera:
   m_GameObject: {fileID: 519420028}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 2
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -808,7 +808,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1438785189}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &519420033
 MonoBehaviour:
@@ -2550,11 +2550,6 @@ SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 2095623651001216604, guid: c55f71011849b4b4c9010164660f986d, type: 3}
   m_PrefabInstance: {fileID: 836343219375821721}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1438785189 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3137666252444506918, guid: c55f71011849b4b4c9010164660f986d, type: 3}
-  m_PrefabInstance: {fileID: 836343219375821721}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1451214247
 GameObject:
   m_ObjectHideFlags: 0
@@ -3070,7 +3065,7 @@ SpriteRenderer:
   m_SmallMeshCulling: 1
   m_ForceMeshLod: -1
   m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 32
+  m_RenderingLayerMask: 33
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
@@ -3336,7 +3331,7 @@ SpriteRenderer:
   m_SmallMeshCulling: 1
   m_ForceMeshLod: -1
   m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 32
+  m_RenderingLayerMask: 33
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
@@ -4078,18 +4073,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 379027684}
     - target: {fileID: 1303822018347656461, guid: c55f71011849b4b4c9010164660f986d, type: 3}
-      propertyPath: personalCamera
-      value: 
-      objectReference: {fileID: 519420031}
-    - target: {fileID: 1303822018347656461, guid: c55f71011849b4b4c9010164660f986d, type: 3}
-      propertyPath: boardedMask.m_Bits
-      value: 759
-      objectReference: {fileID: 0}
-    - target: {fileID: 1303822018347656461, guid: c55f71011849b4b4c9010164660f986d, type: 3}
-      propertyPath: AllRenderMask.m_Bits
-      value: 439
-      objectReference: {fileID: 0}
-    - target: {fileID: 1303822018347656461, guid: c55f71011849b4b4c9010164660f986d, type: 3}
       propertyPath: interactRayIgnore.m_Bits
       value: 64
       objectReference: {fileID: 0}
@@ -4175,10 +4158,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 3137666252444506918, guid: c55f71011849b4b4c9010164660f986d, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 519420032}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c55f71011849b4b4c9010164660f986d, type: 3}
 --- !u!1001 &3595138251029949837
@@ -4244,6 +4224,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 619394802}
   - {fileID: 836343219375821721}
+  - {fileID: 519420032}
   - {fileID: 3595138251029949837}
   - {fileID: 786808076}
   - {fileID: 680063432}

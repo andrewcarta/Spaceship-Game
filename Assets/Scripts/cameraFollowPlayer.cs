@@ -22,6 +22,6 @@ public class cameraFollowPlayer : MonoBehaviour
     private void LateUpdate()
     {
         this.transform.position = new Vector3(playerToFollow.transform.position.x,playerToFollow.transform.position.y,-10);
-       
+        this.transform.rotation = Quaternion.identity;
     }
 }

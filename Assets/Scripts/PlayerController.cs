@@ -20,6 +20,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private SpriteRenderer sp;
     [SerializeField] private RaycastHit2D interactRay;
     [SerializeField] private LayerMask interactRayInclude;
+    [SerializeField] private Camera personalCamera;
+    [SerializeField] private LayerMask boardedMask;
+    [SerializeField] private LayerMask AllRenderMask;
 
     //All player stats and specs we can give an int value to
     private enum stats : int { 
@@ -54,6 +57,7 @@ public class PlayerController : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        cameraLayerRenderSet();
         move = moveInput.action.ReadValue<Vector2>();
         rb.linearVelocity = move*(int)(stats.moveSpeed);
         rotateSprite();
@@ -122,15 +126,15 @@ public class PlayerController : MonoBehaviour
     }
 
     //ALL methods linked to the inputMap and are called when the input happens (public so the methods can be used in other classes?)
-    public void OnActionA(InputAction.CallbackContext context)
+    private void OnActionA(InputAction.CallbackContext context)
     {
         print("<color=orange> Input A");
     }
-    public void OnActionB(InputAction.CallbackContext context)
+    private void OnActionB(InputAction.CallbackContext context)
     {
         print("<color=orange> Input B");
     }
-    public void OnActionC(InputAction.CallbackContext context)
+    private void OnActionC(InputAction.CallbackContext context)
     {
         print("<color=orange> Input C");
         if (interactRayCollider != null)
@@ -183,6 +187,11 @@ public class PlayerController : MonoBehaviour
         Transform parent = mostRecentHit.GetComponentInParent<Transform>().parent;
         if (parent.CompareTag("Ship")) { currentShip = parent.gameObject; }
         }
+    }
+    private void cameraLayerRenderSet()
+    {
+        if (boardedShip) { personalCamera.cullingMask = interactRayInclude; }
+        else { personalCamera.cullingMask = AllRenderMask; }
     }
 
     private void OnEnable()

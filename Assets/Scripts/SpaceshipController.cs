@@ -22,10 +22,11 @@ public class ShipController : MonoBehaviour
     //All ship stats and specs we can give an int value to
     private enum stats : int
     {
-        moveSpeed = 10
+        speed = 10
     }
     private bool piloted;
     private Vector2 move;
+    private Transform pilotSeat;
     [SerializeField] private Transform pilot;
 
 
@@ -38,7 +39,7 @@ public class ShipController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        move = Vector2.zero;
+            move = Vector2.zero;
         print("<color=green> " + this.name + " Spawned at " + gameObject.transform.position.x + " " + gameObject.transform.position.y);
     }
 
@@ -49,8 +50,9 @@ public class ShipController : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        lockPilotPos();
         move = moveShip.action.ReadValue<Vector2>();
-        rb.linearVelocity = move * (int)(stats.moveSpeed);
+        rb.linearVelocity = move * (int)(stats.speed);
     }
 
 
@@ -72,19 +74,33 @@ public class ShipController : MonoBehaviour
     }
 
     //ALL methods linked to the inputMap and are called when the input happens (public so the methods can be used in other classes?)
-    public void ShipActionA(InputAction.CallbackContext context)
+    private void ShipActionA(InputAction.CallbackContext context)
     {
-        print("<color=orange> Input A");
+        print("<color=orange> Ship Input A");
     }
-    public void ShipActionB(InputAction.CallbackContext context)
+    private void ShipActionB(InputAction.CallbackContext context)
     {
-        print("<color=orange> Input B");
+        print("<color=orange> Ship Input B");
     }
-    public void ShipActionC(InputAction.CallbackContext context)
+    private void ShipActionC(InputAction.CallbackContext context)
     {
+        print("<color=orange> Ship Input C");
+        //! This press will unpilot the ship and disable this script while enabling the playerController ship
+        //enable player script
+        foreach (Transform child in transform) {
+            //checks if is player AND if player is pilot
+            if (child.Equals(pilot)) {  }
+        }
+        //disable this script
 
+    }
 
-
+    private void lockPilotPos() {
+        pilotSeat = this.transform;
+        foreach (Transform child in this.transform)
+        {
+            if (child.name.Contains("PilotSeat")) { pilotSeat = child; }
+        }
 
     }
 
