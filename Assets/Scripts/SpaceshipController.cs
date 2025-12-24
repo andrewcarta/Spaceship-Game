@@ -23,7 +23,8 @@ public class ShipController : MonoBehaviour
     [SerializeField] private Collider2D cdBase;
     [SerializeField] private Collider2D cdTop;
     [SerializeField] private SpriteRenderer spBase;
-    [SerializeField] private SpriteRenderer spTop;
+    [SerializeField] private SpriteRenderer spTop; 
+    [SerializeField] private GameObject shipControls;
     private PlayerInput pilotInput;
 
     //All ship stats and specs we can give an int value to
@@ -35,7 +36,7 @@ public class ShipController : MonoBehaviour
     private Vector2 move;
     private Transform pilotSeat;
     private GameObject pilot;
-    [SerializeField] private GameObject shipControls;
+    private List<Transform> mainEngineSystem;
 
 
 
@@ -43,6 +44,7 @@ public class ShipController : MonoBehaviour
     void Start()
     {
         //TODO It would be amazing to have smth to set all SerializeFields at game start code
+        mainEngineSystem = new List<Transform>();
         move = Vector2.zero;
         foreach (Transform child in transform) {
             if (child.name.Contains("ShipControls")) {
@@ -51,14 +53,20 @@ public class ShipController : MonoBehaviour
             if (child.name.Contains("PilotSeat")) {
                 pilotSeat = child.transform;
             }
+            //All ships will have a main engine system so I can use them to list off the engine points
+            if (child.name.Contains("MainEngineSystem")){
+                foreach (Transform enginePoint in transform) { 
+                mainEngineSystem.Add(enginePoint);
+                }
+                
+            }
         }
 
 
         print("<color=green> " + this.name + " spawned at " + gameObject.transform.position.x + " " + gameObject.transform.position.y);
-        print("Spaceship controller initialized, now disabling till piloted");
         if (!piloted)
         {
-            print("<color=red> Couldn't find pilot, disabling SpaceshipController");
+            print("<color=red> No initial pilot, disabling SpaceshipController");
             enabled = false;
         }
     }
@@ -73,23 +81,21 @@ public class ShipController : MonoBehaviour
         lockPilotPos();
         if (piloted)
         {
-            move = pilotInput.actions["PlayerMove"].ReadValue<Vector2>();
+            applyMovement();   
         }
-
-        rb.linearVelocity = move * (int)(stats.speed);
     }
 
 
     //I do need to rework the rotation and movement for smoother movement for spaceship
-    private void rotateSprite()
+    //! This method will be reworked and some engine sorter will be made to allow for easy
+    private void applyMovement()
     {
-        Vector2 thisPos = transform.position;
-        Vector2 targetPos = thisPos + move;
-        float angle = Mathf.Atan2(move.y, move.x) * Mathf.Rad2Deg - 90;
-        if (move != Vector2.zero)
-        {
-            transform.rotation = Quaternion.Euler(0, 0, angle);
-        }
+        move = pilotInput.actions["PlayerMove"].ReadValue<Vector2>();
+        if (move.y > 0) { }
+        if (move.y < 0) { }
+        if (move.x > 0) { }
+        if (move.x < 0) { }
+        rb.linearVelocity = move * (int)(stats.speed);
     }
     
     private void targetRaycasts()
@@ -97,7 +103,6 @@ public class ShipController : MonoBehaviour
 
     }
 
-    //ALL methods linked to the inputMap and are called when the input happens (public so the methods can be used in other classes?)
     private void ShipActionA(InputAction.CallbackContext context)
     {
         print("<color=orange> Ship Input A");
@@ -126,6 +131,9 @@ public class ShipController : MonoBehaviour
         }
     }
 
+    //? orders the ship's engines from the -+ quad to -- quad to -+ and ++
+
+
     //? This method will be called to let the ship know who the pilot is when the ship starts to piloted
     private void pilotShip(GameObject plt) {
         enabled = true;
@@ -141,20 +149,21 @@ public class ShipController : MonoBehaviour
         print("Ship unpiloted by " + pilot.name);
         pilot = null;
         piloted = false;
-        enabled = false;
+        rb.linearVelocity = rb.linearVelocity / 100;
         pilotInput.actions["PlayerActionA"].started -= ShipActionA;
         pilotInput.actions["PlayerActionB"].started -= ShipActionB;
         pilotInput.actions["PlayerActionC"].started -= ShipActionC;
+        enabled = false;
     }
 
     private void OnEnable()
     {
         PlayerController.OnShipPiloted += pilotShip;
-        print("Spaceship controller enabled");
+        print("<color=red> SpaceshipController enabled");
     }
     private void OnDisable()
     {
         PlayerController.OnShipPiloted -= pilotShip;
-        print("Spaceship controller disabled");
+        print("<color=red> Spaceship controller disabled");
     }
 }

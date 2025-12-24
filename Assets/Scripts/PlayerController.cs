@@ -201,7 +201,7 @@ public class PlayerController : MonoBehaviour
     
     private void cameraLayerRenderSet()
     {
-        if (boardedShip) { personalCamera.cullingMask = interactRayInclude; }
+        if (boardedShip) { personalCamera.cullingMask = boardedMask; }
         else { personalCamera.cullingMask = AllRenderMask; }
     }
 
@@ -212,9 +212,7 @@ public class PlayerController : MonoBehaviour
         playerInput.actions["PlayerActionA"].started += OnActionA;
         playerInput.actions["PlayerActionB"].started += OnActionB;
         playerInput.actions["PlayerActionC"].started += OnActionC;
-        //x actionAInput.action.started += OnActionA;
-        //x actionBInput.action.started += OnActionB;
-        //x actionCInput.action.started += OnActionC;
+
         
     }
     private void OnDisable()
@@ -223,8 +221,5 @@ public class PlayerController : MonoBehaviour
         playerInput.actions["PlayerActionA"].started -= OnActionA;
         playerInput.actions["PlayerActionB"].started -= OnActionB;
         playerInput.actions["PlayerActionC"].started -= OnActionC;
-        //x actionAInput.action.started -= OnActionA;
-        //x actionBInput.action.started -= OnActionB;
-        //x actionCInput.action.started -= OnActionC;
     }
 }

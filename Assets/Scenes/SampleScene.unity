@@ -129,7 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 462756}
   m_Layer: 0
-  m_Name: Ship Engine Point
+  m_Name: EnginePoint
   m_TagString: Untagged
   m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -148,7 +148,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1169447467}
+  m_Father: {fileID: 141415418}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &19158628
 GameObject:
@@ -240,6 +240,38 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1773108806}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &141415417
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 141415418}
+  m_Layer: 0
+  m_Name: MainEngineSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &141415418
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 141415417}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 462756}
+  m_Father: {fileID: 1169447467}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &174516400
 GameObject:
@@ -542,7 +574,7 @@ GameObject:
   m_Component:
   - component: {fileID: 393745294}
   m_Layer: 0
-  m_Name: Ship Engine Point
+  m_Name: EnginePoint
   m_TagString: Untagged
   m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -847,7 +879,7 @@ GameObject:
   m_Component:
   - component: {fileID: 573063481}
   m_Layer: 0
-  m_Name: Ship Engine Point (2)
+  m_Name: EnginePoint (2)
   m_TagString: Untagged
   m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -2001,7 +2033,7 @@ GameObject:
   m_Component:
   - component: {fileID: 907153505}
   m_Layer: 0
-  m_Name: Ship Main Engine System
+  m_Name: MainEngineSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2492,11 +2524,11 @@ Transform:
   - {fileID: 621353323}
   - {fileID: 2072364147}
   - {fileID: 1033458812}
-  - {fileID: 462756}
   - {fileID: 2073547967}
   - {fileID: 1385512913}
   - {fileID: 339577400}
   - {fileID: 476217391}
+  - {fileID: 141415418}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &1169447468
@@ -3136,7 +3168,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -1848609768828095866, guid: 09578564c25dc4b4d974741a510d23fe, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -3322,7 +3354,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1952175432}
   m_Layer: 0
-  m_Name: Ship Engine Point (1)
+  m_Name: EnginePoint (1)
   m_TagString: Untagged
   m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -3422,7 +3454,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 1705190564046082793, guid: 8083b6e891a0fd74b981324c3a3809a1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -4157,7 +4189,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1303822018347656461, guid: c55f71011849b4b4c9010164660f986d, type: 3}
       propertyPath: AllRenderMask.m_Bits
-      value: 439
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 1303822018347656461, guid: c55f71011849b4b4c9010164660f986d, type: 3}
       propertyPath: interactRayIgnore.m_Bits
@@ -4259,6 +4291,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1505555887187860063, guid: d72b2e18dabf2b34b840d01696ff3ee5, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4338366649478864639, guid: d72b2e18dabf2b34b840d01696ff3ee5, type: 3}
       propertyPath: m_Name
       value: Wooden Crate
