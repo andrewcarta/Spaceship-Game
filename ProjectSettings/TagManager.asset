@@ -8,8 +8,7 @@ TagManager:
   - Enter
   - Exit
   - Use
-  - EntryPoint
-  - ExitPoint
+  - Point
   layers:
   - Default
   - TransparentFX

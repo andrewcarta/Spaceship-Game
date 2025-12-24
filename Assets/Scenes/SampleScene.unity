@@ -220,8 +220,8 @@ GameObject:
   m_Component:
   - component: {fileID: 48739388}
   m_Layer: 0
-  m_Name: Ship Exit Point
-  m_TagString: ExitPoint
+  m_Name: ExitPoint
+  m_TagString: Point
   m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2397,6 +2397,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &942190941
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 942190942}
+  m_Layer: 0
+  m_Name: PilotSeat
+  m_TagString: Point
+  m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &942190942
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942190941}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.23958015, y: 7.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1773108806}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1033458811
 GameObject:
   m_ObjectHideFlags: 0
@@ -2407,8 +2438,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1033458812}
   m_Layer: 0
-  m_Name: Ship Entry Point
-  m_TagString: EntryPoint
+  m_Name: EntryPoint
+  m_TagString: Point
   m_Icon: {fileID: 2488908585195742037, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2519,8 +2550,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1385512913}
   m_Layer: 0
-  m_Name: Ship Exit Point
-  m_TagString: ExitPoint
+  m_Name: ExitPoint
+  m_TagString: Point
   m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2555,6 +2586,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3137666252444506918, guid: c55f71011849b4b4c9010164660f986d, type: 3}
   m_PrefabInstance: {fileID: 836343219375821721}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1438785190 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 596419396138107355, guid: c55f71011849b4b4c9010164660f986d, type: 3}
+  m_PrefabInstance: {fileID: 836343219375821721}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1438785179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
 --- !u!1 &1451214247
 GameObject:
   m_ObjectHideFlags: 0
@@ -3147,6 +3189,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1773108806}
   - component: {fileID: 1773108805}
+  - component: {fileID: 1773108807}
   m_Layer: 0
   m_Name: Shuttle Spaceship
   m_TagString: Ship
@@ -3203,8 +3246,27 @@ Transform:
   - {fileID: 183303791}
   - {fileID: 907153505}
   - {fileID: 1451214248}
+  - {fileID: 942190942}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1773108807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1773108804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d4432765c1f8e747a32bc3df3d30780, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShipController
+  rb: {fileID: 1773108805}
+  cdBase: {fileID: 942055629}
+  cdTop: {fileID: 1708994479}
+  spBase: {fileID: 942055630}
+  spTop: {fileID: 1708994480}
+  shipControls: {fileID: 1451214247}
 --- !u!114 &1829069089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3229,8 +3291,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1863657530}
   m_Layer: 0
-  m_Name: Ship Entry Point
-  m_TagString: EntryPoint
+  m_Name: EntryPoint
+  m_TagString: Point
   m_Icon: {fileID: 2488908585195742037, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4057,6 +4119,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 519420031}
+    - target: {fileID: 596419396138107355, guid: c55f71011849b4b4c9010164660f986d, type: 3}
+      propertyPath: m_NotificationBehavior
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1303822018347656461, guid: c55f71011849b4b4c9010164660f986d, type: 3}
       propertyPath: sp
       value: 
@@ -4065,6 +4131,10 @@ PrefabInstance:
       propertyPath: moveInput
       value: 
       objectReference: {fileID: 1829069089}
+    - target: {fileID: 1303822018347656461, guid: c55f71011849b4b4c9010164660f986d, type: 3}
+      propertyPath: playerInput
+      value: 
+      objectReference: {fileID: 1438785190}
     - target: {fileID: 1303822018347656461, guid: c55f71011849b4b4c9010164660f986d, type: 3}
       propertyPath: actionAInput
       value: 

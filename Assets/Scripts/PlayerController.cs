@@ -6,6 +6,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+
+
 //! example
 //? example
 //x example
@@ -14,6 +16,8 @@ using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
+    
+    [SerializeField] private PlayerInput playerInput;
     //parts of the player's unity components
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Collider2D cd;
@@ -33,13 +37,11 @@ public class PlayerController : MonoBehaviour
     private bool boardedShip;
     private GameObject currentShip;
     private GameObject mostRecentHit;
-
+    private bool piloting;
+    public static event Action<GameObject> OnShipPiloted;
 
     //Input Actions
-    [SerializeField] private InputActionReference moveInput;
-    [SerializeField] private InputActionReference actionAInput;
-    [SerializeField] private InputActionReference actionBInput;
-    [SerializeField] private InputActionReference actionCInput;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -58,7 +60,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         cameraLayerRenderSet();
-        move = moveInput.action.ReadValue<Vector2>();
+        move = playerInput.actions["PlayerMove"].ReadValue<Vector2>();
         rb.linearVelocity = move*(int)(stats.moveSpeed);
         rotateSprite();
         targetRaycasts();
@@ -148,7 +150,7 @@ public class PlayerController : MonoBehaviour
                 //Maybe for bigger ships rework the system a little to make an array of all and pick the closest one to put them in
                 foreach (Transform child in parent)
                 {
-                    if (child.CompareTag("EntryPoint")) { 
+                    if (child.CompareTag("Point") && child.gameObject.name.Contains("EntryPoint")) { 
                         transform.position = child.position; 
                         boardedShip = true;
                     }
@@ -162,7 +164,7 @@ public class PlayerController : MonoBehaviour
                 Transform parent = mostRecentHit.GetComponentInParent<Transform>().parent;
                 foreach (Transform child in parent)
                 {
-                    if (child.CompareTag("ExitPoint")) { 
+                    if (child.CompareTag("Point") && child.gameObject.name.Contains("ExitPoint")) { 
                         transform.position = child.position; 
                         boardedShip = false; 
                     }
@@ -171,11 +173,19 @@ public class PlayerController : MonoBehaviour
             }
 
             if (interactRayCollider.gameObject.name.Contains("ShipControls")) {
-                //! This method is diff because it needs to set the player to start using the spaceship controller
+                //! This is diff from exit and enter if statements so it will swap from player controller to ship controller
                 Transform parent = mostRecentHit.GetComponentInParent<Transform>().parent;
-
-
+                
+                parent.GetComponent<MonoBehaviour>().enabled = true;
+                print("Debug: enabled spaceshipController script");
+                
                 print("<color=yellow> Piloting" + parent.name);
+                OnShipPiloted.Invoke(this.gameObject);
+                enabled = false;
+                print("Debug: PlayerController deactivated");
+
+
+                
 
             }
 
@@ -188,6 +198,7 @@ public class PlayerController : MonoBehaviour
         if (parent.CompareTag("Ship")) { currentShip = parent.gameObject; }
         }
     }
+    
     private void cameraLayerRenderSet()
     {
         if (boardedShip) { personalCamera.cullingMask = interactRayInclude; }
@@ -196,17 +207,24 @@ public class PlayerController : MonoBehaviour
 
     private void OnEnable()
     {
+        print("Player controller enabled");
         //do the code: 'buttonName'.action.started += On+'buttonName'; to make a method instantiator for input method
-        actionAInput.action.started += OnActionA;
-        actionBInput.action.started += OnActionB;
-        actionCInput.action.started += OnActionC;
+        playerInput.actions["PlayerActionA"].started += OnActionA;
+        playerInput.actions["PlayerActionB"].started += OnActionB;
+        playerInput.actions["PlayerActionC"].started += OnActionC;
+        //x actionAInput.action.started += OnActionA;
+        //x actionBInput.action.started += OnActionB;
+        //x actionCInput.action.started += OnActionC;
         
     }
     private void OnDisable()
     {
         //need this disable code or else if code is enabled twice the obj will run the method twice
-        actionAInput.action.started -= OnActionA;
-        actionBInput.action.started -= OnActionB;
-        actionCInput.action.started -= OnActionC;
+        playerInput.actions["PlayerActionA"].started -= OnActionA;
+        playerInput.actions["PlayerActionB"].started -= OnActionB;
+        playerInput.actions["PlayerActionC"].started -= OnActionC;
+        //x actionAInput.action.started -= OnActionA;
+        //x actionBInput.action.started -= OnActionB;
+        //x actionCInput.action.started -= OnActionC;
     }
 }
