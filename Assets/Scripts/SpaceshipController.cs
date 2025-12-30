@@ -26,7 +26,7 @@ public class ShipController : MonoBehaviour
     [SerializeField] private SpriteRenderer spBase;
     [SerializeField] private SpriteRenderer spTop; 
     [SerializeField] private GameObject shipControls;
-    [SerializeField] private int shipSize;
+    [SerializeField] private int shipScale;
     [SerializeField] private int shipSpeed;
     [SerializeField] private int shipTurnSpeed;
     private PlayerInput pilotInput;
@@ -94,10 +94,13 @@ public class ShipController : MonoBehaviour
         // Rotates the ship left and right(balanced by ship size to slow turning)
         //TODO Make a method to assign values for ship size and possibly speed by default
         //? Possibly change rotating to angularVelocity
-        transform.Rotate(new Vector3(0,0,-1 * move.x * (int)(shipSpeed)/shipSize ));
+        transform.Rotate(new Vector3(0,0,-1 * move.x * (int)(shipTurnSpeed)/shipScale));
         //applies a velocity on the ship pointing in the direction it is facing
-        if (move.y > 0) { print("move.y>0"); rb.linearVelocity = transform.up * (int)(shipSpeed); }
-        if (move.y < 0) { print("move.y<0"); rb.linearVelocity = transform.up * -1 * (int)(shipSpeed); }
+        if (move.y != 0)
+        {
+            if (move.y > 0) { print("move.y>0"); rb.linearVelocity = transform.up * (int)(shipSpeed)/shipScale; }
+            if (move.y < 0) { print("move.y<0"); rb.linearVelocity = transform.up * -1 * (int)(shipSpeed)/(3*shipScale); }
+        }
     }
     
     private void targetRaycasts()
