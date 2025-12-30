@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using Unity.VisualScripting;
 using UnityEditor.Rendering;
 using UnityEngine;
@@ -25,13 +26,12 @@ public class ShipController : MonoBehaviour
     [SerializeField] private SpriteRenderer spBase;
     [SerializeField] private SpriteRenderer spTop; 
     [SerializeField] private GameObject shipControls;
+    [SerializeField] private int shipSize;
+    [SerializeField] private int shipSpeed;
+    [SerializeField] private int shipTurnSpeed;
     private PlayerInput pilotInput;
 
     //All ship stats and specs we can give an int value to
-    private enum stats : int
-    {
-        speed = 10
-    }
     private bool piloted;
     private Vector2 move;
     private Transform pilotSeat;
@@ -66,7 +66,7 @@ public class ShipController : MonoBehaviour
         print("<color=green> " + this.name + " spawned at " + gameObject.transform.position.x + " " + gameObject.transform.position.y);
         if (!piloted)
         {
-            print("<color=red> No initial pilot, disabling SpaceshipController");
+            print("<color=pink> No initial pilot, disabling SpaceshipController");
             enabled = false;
         }
     }
@@ -91,11 +91,13 @@ public class ShipController : MonoBehaviour
     private void applyMovement()
     {
         move = pilotInput.actions["PlayerMove"].ReadValue<Vector2>();
-        if (move.y > 0) { }
-        if (move.y < 0) { }
-        if (move.x > 0) { }
-        if (move.x < 0) { }
-        rb.linearVelocity = move * (int)(stats.speed);
+        // Rotates the ship left and right(balanced by ship size to slow turning)
+        //TODO Make a method to assign values for ship size and possibly speed by default
+        //? Possibly change rotating to angularVelocity
+        transform.Rotate(new Vector3(0,0,-1 * move.x * (int)(shipSpeed)/shipSize ));
+        //applies a velocity on the ship pointing in the direction it is facing
+        if (move.y > 0) { print("move.y>0"); rb.linearVelocity = transform.up * (int)(shipSpeed); }
+        if (move.y < 0) { print("move.y<0"); rb.linearVelocity = transform.up * -1 * (int)(shipSpeed); }
     }
     
     private void targetRaycasts()
@@ -131,9 +133,6 @@ public class ShipController : MonoBehaviour
         }
     }
 
-    //? orders the ship's engines from the -+ quad to -- quad to -+ and ++
-
-
     //? This method will be called to let the ship know who the pilot is when the ship starts to piloted
     private void pilotShip(GameObject plt) {
         enabled = true;
@@ -159,11 +158,11 @@ public class ShipController : MonoBehaviour
     private void OnEnable()
     {
         PlayerController.OnShipPiloted += pilotShip;
-        print("<color=red> SpaceshipController enabled");
+        print("<color=pink> SpaceshipController enabled");
     }
     private void OnDisable()
     {
         PlayerController.OnShipPiloted -= pilotShip;
-        print("<color=red> Spaceship controller disabled");
+        print("<color=pink> Spaceship controller disabled");
     }
 }

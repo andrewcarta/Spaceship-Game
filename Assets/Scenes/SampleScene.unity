@@ -2747,6 +2747,9 @@ MonoBehaviour:
   spBase: {fileID: 621353322}
   spTop: {fileID: 2072364148}
   shipControls: {fileID: 291605286}
+  shipSize: 5
+  shipSpeed: 10
+  shipTurnSpeed: 4
 --- !u!114 &1279989829
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3488,6 +3491,9 @@ MonoBehaviour:
   spBase: {fileID: 942055630}
   spTop: {fileID: 1708994480}
   shipControls: {fileID: 1451214247}
+  shipSize: 10
+  shipSpeed: 10
+  shipTurnSpeed: 2
 --- !u!114 &1829069089
 MonoBehaviour:
   m_ObjectHideFlags: 0
