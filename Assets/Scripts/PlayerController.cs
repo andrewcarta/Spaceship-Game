@@ -160,8 +160,9 @@ public class PlayerController : MonoBehaviour
                 foreach (Transform child in parent)
                 {
                     if (child.CompareTag("Point") && child.gameObject.name.Contains("EntryPoint")) { 
-                        transform.position = child.position; 
+                        transform.position = child.position;
                         boardedShip = true;
+                        this.transform.parent = child.transform.parent;
                     }
                     //teleports the player to the entry point on the ship(no special effects happen for this yet)
                 }
@@ -175,7 +176,8 @@ public class PlayerController : MonoBehaviour
                 {
                     if (child.CompareTag("Point") && child.gameObject.name.Contains("ExitPoint")) { 
                         transform.position = child.position; 
-                        boardedShip = false; 
+                        boardedShip = false;
+                        this.transform.parent = null;
                     }
                 }
                 print("<color=yellow> Exited" + parent.name);
@@ -192,10 +194,6 @@ public class PlayerController : MonoBehaviour
                 print("<color=yellow> Piloting" + parent.name);
                 enabled = false;
                 print("Debug: PlayerController deactivated");
-
-
-                
-
             }
 
 
