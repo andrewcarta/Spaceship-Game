@@ -29,6 +29,8 @@ public class ShipController : MonoBehaviour
     [SerializeField] private int shipScale;
     [SerializeField] private int shipSpeed;
     [SerializeField] private int shipTurnSpeed;
+    [SerializeField] private int shipArmor;
+    [SerializeField] private int shipHealth;
     private PlayerInput pilotInput;
 
     //All ship stats and specs we can give an int value to
@@ -86,6 +88,7 @@ public class ShipController : MonoBehaviour
             applyMovement();
             lockPilotPos();
         }
+        checkForCollsions();
     }
 
 
@@ -107,7 +110,13 @@ public class ShipController : MonoBehaviour
             if (move.y < 0) { rb.linearVelocity = transform.up * -1 * (int)(shipSpeed*boostBonus)/(3*shipScale); }
         }
     }
+
+    //? This method will check for collisions with other ships and deal damage based on that
+    private void checkForCollsions() { 
     
+    }
+
+
     private void targetRaycasts()
     {
 

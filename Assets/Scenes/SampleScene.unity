@@ -2750,6 +2750,8 @@ MonoBehaviour:
   shipScale: 5
   shipSpeed: 50
   shipTurnSpeed: 8
+  shipArmor: 1
+  shipHealth: 15
 --- !u!114 &1279989829
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3494,6 +3496,8 @@ MonoBehaviour:
   shipScale: 10
   shipSpeed: 50
   shipTurnSpeed: 6
+  shipArmor: 2
+  shipHealth: 20
 --- !u!114 &1829069089
 MonoBehaviour:
   m_ObjectHideFlags: 0

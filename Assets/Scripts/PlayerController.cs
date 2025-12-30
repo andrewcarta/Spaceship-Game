@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     private enum stats : int { 
     moveSpeed = 10
     }
+    private float dashCooldown = 10;
     private Vector2 move;
     private Collider2D interactRayCollider;
     private bool boardedShip;
@@ -60,8 +61,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         cameraLayerRenderSet();
-        move = playerInput.actions["PlayerMove"].ReadValue<Vector2>();
-        rb.linearVelocity = move*(int)(stats.moveSpeed);
+        movePlayer(Time.deltaTime);
         rotateSprite();
         targetRaycasts();
         checkRaycastContext();
@@ -69,7 +69,17 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    //I do need to rework the rotation and movement for smoother movement for spaceship
+    private void movePlayer(float delta)
+    {
+        move = playerInput.actions["PlayerMove"].ReadValue<Vector2>();
+        if (playerInput.actions["BoostMovement"].IsPressed() && dashCooldown <= 0 && move != Vector2.zero) {
+            //TODO Add some particles for this
+            move *= 5;
+            dashCooldown = 10;
+        }
+        dashCooldown -= delta;
+        rb.linearVelocity = move * (int)(stats.moveSpeed);
+    }
     private void rotateSprite() { 
     Vector2 thisPos = transform.position;
     Vector2 targetPos = thisPos+move;
