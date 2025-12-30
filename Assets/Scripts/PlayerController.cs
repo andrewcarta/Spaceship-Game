@@ -39,7 +39,6 @@ public class PlayerController : MonoBehaviour
     private GameObject currentShip;
     private GameObject mostRecentHit;
     private bool piloting;
-    public static event Action<GameObject> OnShipPiloted;
 
     //Input Actions
 
@@ -185,12 +184,12 @@ public class PlayerController : MonoBehaviour
             if (interactRayCollider.gameObject.name.Contains("ShipControls")) {
                 //! This is diff from exit and enter if statements so it will swap from player controller to ship controller
                 Transform parent = mostRecentHit.GetComponentInParent<Transform>().parent;
-                
+                //? vvv uses the code previous to find the shipController script and place it as an obj here
+                ShipController shipScript = (ShipController)parent.GetComponent<MonoBehaviour>();
                 parent.GetComponent<MonoBehaviour>().enabled = true;
                 print("Debug: enabled spaceshipController script");
-                
+                shipScript.pilotShip(this.gameObject,playerInput);
                 print("<color=yellow> Piloting" + parent.name);
-                OnShipPiloted.Invoke(this.gameObject);
                 enabled = false;
                 print("Debug: PlayerController deactivated");
 
@@ -202,9 +201,7 @@ public class PlayerController : MonoBehaviour
 
         }}
 
-    private void OnBoostedMovement(InputAction.CallbackContext context) { 
-    
-    }
+    private void OnBoostedMovement(InputAction.CallbackContext context) { }
 
     private void getCurrentShip() {
         if (boardedShip) { 

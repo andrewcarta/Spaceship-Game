@@ -157,11 +157,11 @@ public class ShipController : MonoBehaviour
     }
 
     //? This method will be called to let the ship know who the pilot is when the ship starts to piloted
-    private void pilotShip(GameObject plt) {
+    public void pilotShip(GameObject plt, PlayerInput input) {
         enabled = true;
         pilot = plt;
         piloted = true;
-        pilotInput = plt.GetComponent<PlayerInput>();
+        pilotInput = input;
         print("Ship being piloted by " + plt.name);
         pilotInput.actions["PlayerActionA"].started += ShipActionA;
         pilotInput.actions["PlayerActionB"].started += ShipActionB;
@@ -182,12 +182,12 @@ public class ShipController : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerController.OnShipPiloted += pilotShip;
+
         print("<color=magenta> SpaceshipController enabled");
     }
     private void OnDisable()
     {
-        PlayerController.OnShipPiloted -= pilotShip;
+
         print("<color=magenta> Spaceship controller disabled");
     }
 }
