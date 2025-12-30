@@ -2150,7 +2150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee45bdd30732e5a43ae7580e9748eb93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  playerToFollow: {fileID: 1438785179}
+  playerToFollow: {fileID: 1228586106}
 --- !u!114 &724603596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2903,12 +2903,17 @@ MonoBehaviour:
   shipTurnSpeed: 8
   shipArmor: 1
   shipHealth: 15
+--- !u!1 &1228586106 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2446455801683667639, guid: c55f71011849b4b4c9010164660f986d, type: 3}
+  m_PrefabInstance: {fileID: 1679875261}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1228586107 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 596419396138107355, guid: c55f71011849b4b4c9010164660f986d, type: 3}
   m_PrefabInstance: {fileID: 1679875261}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1228586106}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
@@ -2929,9 +2934,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1262117856}
   - component: {fileID: 1262117855}
+  - component: {fileID: 1262117857}
   m_Layer: 0
   m_Name: PlayerInputManager
-  m_TagString: Untagged
+  m_TagString: EditorOnly
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2961,7 +2967,7 @@ MonoBehaviour:
   m_JoinAction:
     m_UseReference: 0
     m_Action:
-      m_Name: 
+      m_Name: Join
       m_Type: 0
       m_ExpectedControlType: 
       m_Id: 5e9d6837-d6c9-4767-b29d-ad4240ee60b9
@@ -2973,7 +2979,7 @@ MonoBehaviour:
   m_PlayerPrefab: {fileID: 0}
   m_SplitScreen: 1
   m_MaintainAspectRatioInSplitScreen: 1
-  m_FixedNumberOfSplitScreens: -1
+  m_FixedNumberOfSplitScreens: 4
   m_SplitScreenRect:
     serializedVersion: 2
     x: 0
@@ -2995,6 +3001,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1262117857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1262117854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8843dd5383f089d478bbc89c8cf09df3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  playerInputManager: {fileID: 0}
 --- !u!114 &1279989829
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3276,6 +3295,10 @@ PrefabInstance:
       propertyPath: personalCamera
       value: 
       objectReference: {fileID: 724603598}
+    - target: {fileID: 2217311349632631334, guid: c55f71011849b4b4c9010164660f986d, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 6200000, guid: 54ac1958b4c226a4dac9f4f8f57fb6f3, type: 2}
     - target: {fileID: 2446455801683667639, guid: c55f71011849b4b4c9010164660f986d, type: 3}
       propertyPath: m_Name
       value: Player 2
@@ -4862,6 +4885,7 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1262117856}
   - {fileID: 619394802}
   - {fileID: 836343219375821721}
   - {fileID: 1679875261}
@@ -4873,4 +4897,3 @@ SceneRoots:
   - {fileID: 1656527607}
   - {fileID: 1169447467}
   - {fileID: 1773108806}
-  - {fileID: 1262117856}
