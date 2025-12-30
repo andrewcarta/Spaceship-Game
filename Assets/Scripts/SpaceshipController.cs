@@ -102,9 +102,9 @@ public class ShipController : MonoBehaviour
         //applies a velocity on the ship pointing in the direction it is facing
         if (move.y != 0)
         {
-            if (pilotInput.actions["BoostMovement"].triggered) { boostBonus = 10; boostersActive = true; } else { boostBonus = 1; boostersActive = false; }
-            if (move.y > 0) { rb.linearVelocity = boostBonus * transform.up * (int)(shipSpeed) / shipScale; }
-            if (move.y < 0) { rb.linearVelocity = boostBonus * transform.up * -1 * (int)(shipSpeed)/(3*shipScale); }
+            if (pilotInput.actions["BoostMovement"].IsPressed()) { print("Boosyed"); boostBonus = 2; boostersActive = true; } else { boostBonus = 1; boostersActive = false; }
+            if (move.y > 0) { rb.linearVelocity = transform.up * (int)(shipSpeed*boostBonus) / shipScale; }
+            if (move.y < 0) { rb.linearVelocity = transform.up * -1 * (int)(shipSpeed*boostBonus)/(3*shipScale); }
         }
     }
     
