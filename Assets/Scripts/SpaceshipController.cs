@@ -41,7 +41,7 @@ public class ShipController : MonoBehaviour
     private Transform pilotSeat;
     private GameObject pilot;
     private List<Transform> mainEngineSystem;
-
+    private Vector2 lastVelocity;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -66,7 +66,6 @@ public class ShipController : MonoBehaviour
             }
         }
 
-
         print("<color=green> " + this.name + " spawned at " + gameObject.transform.position.x + " " + gameObject.transform.position.y);
         if (!piloted)
         {
@@ -86,10 +85,13 @@ public class ShipController : MonoBehaviour
         if (piloted)
         {
             applyMovement();
-            translateCrew();
             lockPilotPos();
         }
         checkForCollsions();
+    }
+    private void LateUpdate()
+    { 
+
     }
 
 
@@ -106,25 +108,16 @@ public class ShipController : MonoBehaviour
         //applies a velocity on the ship pointing in the direction it is facing
         if (move.y != 0)
         {
-            if (pilotInput.actions["BoostMovement"].IsPressed()) { print("Boosyed"); boostBonus = 2; boostersActive = true; } else { boostBonus = 1; boostersActive = false; }
+            if (pilotInput.actions["BoostMovement"].IsPressed()) { print("Boosted"); boostBonus = 2; boostersActive = true; } else { boostBonus = 1; boostersActive = false; }
             if (move.y > 0) { rb.linearVelocity = transform.up * (int)(shipSpeed*boostBonus) / shipScale; }
             if (move.y < 0) { rb.linearVelocity = transform.up * -1 * (int)(shipSpeed*boostBonus)/(3*shipScale); }
         }
+        lastVelocity = rb.linearVelocity;
     }
 
     //TODO Finish this and make it work properly so player isn't moved weirdly in the ship
-    private void translateCrew() {
-        foreach (Transform child in transform) {
-            if (child.CompareTag("Player")) {
-                Rigidbody2D tempRB = child.gameObject.GetComponent<Rigidbody2D>();
-                //! The fact that the player has less friction than the ship must be taken into account however due to rotation being a tranform bit, turning is fine
-                //!? Possibly change the velocity statements to relative transform statements for better control
-                if (move.y > 0) { tempRB.linearVelocity = transform.up * (int)(shipSpeed * boostBonus) / shipScale; }
-                if (move.y < 0) { tempRB.linearVelocity = transform.up * -1 * (int)(shipSpeed * boostBonus) / (3 * shipScale); }
-            }
-        }
-
-        
+    public Vector2 getShipVelocity() {
+        return rb.linearVelocity;
     }
 
     //? This method will check for collisions with other ships and deal damage based on that
@@ -169,6 +162,7 @@ public class ShipController : MonoBehaviour
         {
             pilot.transform.position = pilotSeat.position;
             pilot.transform.rotation = this.transform.rotation;
+            pilot.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
         }
     }
 

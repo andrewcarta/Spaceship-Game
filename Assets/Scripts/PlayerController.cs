@@ -70,6 +70,13 @@ public class PlayerController : MonoBehaviour
 
     private void movePlayer(float delta)
     {
+        Vector2 shipVelocity = Vector2.zero;
+        if (boardedShip)
+        {
+            GameObject parent = this.transform.parent.gameObject;
+            ShipController shipScript = (ShipController)parent.GetComponent<MonoBehaviour>();
+            shipVelocity = shipScript.getShipVelocity();
+        }
         move = playerInput.actions["PlayerMove"].ReadValue<Vector2>();
         if (playerInput.actions["BoostMovement"].IsPressed() && dashCooldown <= 0 && move != Vector2.zero) {
             //TODO Add some particles for this
@@ -77,7 +84,8 @@ public class PlayerController : MonoBehaviour
             dashCooldown = 10;
         }
         dashCooldown -= delta;
-        rb.linearVelocity = move * (int)(stats.moveSpeed);
+
+        rb.linearVelocity = (move * (int)(stats.moveSpeed)) + shipVelocity;
     }
     private void rotateSprite() { 
     Vector2 thisPos = transform.position;
@@ -130,10 +138,8 @@ public class PlayerController : MonoBehaviour
         {
             interactRay = Physics2D.Raycast(transform.position, move * 3, 3, interactRayInclude);
         }
-    //this raycast is no longer entirely accurate but is probably close
-    Debug.DrawRay(transform.position, move*3, Color.orangeRed,0.5f);
-
-
+        //this raycast is no longer entirely accurate but is probably close
+        Debug.DrawRay(transform.position, move*3, Color.orangeRed,0.5f);
     }
 
     //ALL methods linked to the inputMap and are called when the input happens (public so the methods can be used in other classes?)
