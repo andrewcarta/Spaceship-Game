@@ -58,7 +58,7 @@ SpriteRenderer:
   m_SmallMeshCulling: 1
   m_ForceMeshLod: -1
   m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 5
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
@@ -169,20 +169,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95c0c6ef16f0ad54fa3a3cac75938520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  playerInput: {fileID: 0}
+  playerInput: {fileID: 596419396138107355}
   rb: {fileID: 2217311349632631334}
   cd: {fileID: 8537260843208843971}
   sp: {fileID: 2095623651001216604}
   interactRayInclude:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 576
   personalCamera: {fileID: 0}
   boardedMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 247
   AllRenderMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
 --- !u!114 &596419396138107355
 MonoBehaviour:
   m_ObjectHideFlags: 0
