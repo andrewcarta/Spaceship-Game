@@ -192,6 +192,10 @@ public class PlayerController : MonoBehaviour
 
         }}
 
+    private void OnBoostedMovement(InputAction.CallbackContext context) { 
+    
+    }
+
     private void getCurrentShip() {
         if (boardedShip) { 
         Transform parent = mostRecentHit.GetComponentInParent<Transform>().parent;
@@ -212,6 +216,7 @@ public class PlayerController : MonoBehaviour
         playerInput.actions["PlayerActionA"].started += OnActionA;
         playerInput.actions["PlayerActionB"].started += OnActionB;
         playerInput.actions["PlayerActionC"].started += OnActionC;
+        playerInput.actions["BoostMovement"].started += OnBoostedMovement;
 
         
     }
@@ -221,5 +226,6 @@ public class PlayerController : MonoBehaviour
         playerInput.actions["PlayerActionA"].started -= OnActionA;
         playerInput.actions["PlayerActionB"].started -= OnActionB;
         playerInput.actions["PlayerActionC"].started -= OnActionC;
+        playerInput.actions["BoostMovement"].started -= OnBoostedMovement;
     }
 }

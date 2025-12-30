@@ -2747,8 +2747,8 @@ MonoBehaviour:
   spBase: {fileID: 621353322}
   spTop: {fileID: 2072364148}
   shipControls: {fileID: 291605286}
-  shipScale: 0
-  shipSpeed: 25
+  shipScale: 5
+  shipSpeed: 50
   shipTurnSpeed: 8
 --- !u!114 &1279989829
 MonoBehaviour:
@@ -3491,9 +3491,9 @@ MonoBehaviour:
   spBase: {fileID: 942055630}
   spTop: {fileID: 1708994480}
   shipControls: {fileID: 1451214247}
-  shipScale: 0
-  shipSpeed: 20
-  shipTurnSpeed: 4
+  shipScale: 10
+  shipSpeed: 50
+  shipTurnSpeed: 6
 --- !u!114 &1829069089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4346,6 +4346,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 519420031}
+    - target: {fileID: 596419396138107355, guid: c55f71011849b4b4c9010164660f986d, type: 3}
+      propertyPath: m_DefaultActionMap
+      value: 1eea23ba-d3b2-4392-a5e8-78ca779a69f9
+      objectReference: {fileID: 0}
     - target: {fileID: 596419396138107355, guid: c55f71011849b4b4c9010164660f986d, type: 3}
       propertyPath: m_NotificationBehavior
       value: 0

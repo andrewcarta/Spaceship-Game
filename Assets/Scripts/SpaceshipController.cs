@@ -33,6 +33,8 @@ public class ShipController : MonoBehaviour
 
     //All ship stats and specs we can give an int value to
     private bool piloted;
+    private bool boostersActive;
+    private int boostBonus = 1;
     private Vector2 move;
     private Transform pilotSeat;
     private GameObject pilot;
@@ -66,7 +68,7 @@ public class ShipController : MonoBehaviour
         print("<color=green> " + this.name + " spawned at " + gameObject.transform.position.x + " " + gameObject.transform.position.y);
         if (!piloted)
         {
-            print("<color=pink> No initial pilot, disabling SpaceshipController");
+            print("<color=magenta> No initial pilot, disabling SpaceshipController");
             enabled = false;
         }
     }
@@ -78,10 +80,11 @@ public class ShipController : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        lockPilotPos();
+        
         if (piloted)
         {
-            applyMovement();   
+            applyMovement();
+            lockPilotPos();
         }
     }
 
@@ -90,6 +93,7 @@ public class ShipController : MonoBehaviour
     //! This method will be reworked and some engine sorter will be made to allow for easy
     private void applyMovement()
     {
+        //TODO Make the engines work slower at the start and faster later on
         move = pilotInput.actions["PlayerMove"].ReadValue<Vector2>();
         // Rotates the ship left and right(balanced by ship size to slow turning)
         //TODO Make a method to assign values for ship size and possibly speed by default
@@ -98,8 +102,9 @@ public class ShipController : MonoBehaviour
         //applies a velocity on the ship pointing in the direction it is facing
         if (move.y != 0)
         {
-            if (move.y > 0) { print("move.y>0"); rb.linearVelocity = transform.up * (int)(shipSpeed)/shipScale; }
-            if (move.y < 0) { print("move.y<0"); rb.linearVelocity = transform.up * -1 * (int)(shipSpeed)/(3*shipScale); }
+            if (pilotInput.actions["BoostMovement"].triggered) { boostBonus = 10; boostersActive = true; } else { boostBonus = 1; boostersActive = false; }
+            if (move.y > 0) { rb.linearVelocity = boostBonus * transform.up * (int)(shipSpeed) / shipScale; }
+            if (move.y < 0) { rb.linearVelocity = boostBonus * transform.up * -1 * (int)(shipSpeed)/(3*shipScale); }
         }
     }
     
@@ -129,10 +134,16 @@ public class ShipController : MonoBehaviour
         }
     }
 
+    
+    private void OnBoostedMovement(InputAction.CallbackContext context) {
+        boostersActive = pilotInput.actions["BoostMovement"].triggered;
+    }
+    
     private void lockPilotPos() {
         if (pilotSeat != null && pilot != null)
         {
             pilot.transform.position = pilotSeat.position;
+            pilot.transform.rotation = this.transform.rotation;
         }
     }
 
@@ -146,6 +157,7 @@ public class ShipController : MonoBehaviour
         pilotInput.actions["PlayerActionA"].started += ShipActionA;
         pilotInput.actions["PlayerActionB"].started += ShipActionB;
         pilotInput.actions["PlayerActionC"].started += ShipActionC;
+        pilotInput.actions["BoostMovement"].started += OnBoostedMovement;
     }
     private void unpilotShip() {
         print("Ship unpiloted by " + pilot.name);
@@ -155,17 +167,18 @@ public class ShipController : MonoBehaviour
         pilotInput.actions["PlayerActionA"].started -= ShipActionA;
         pilotInput.actions["PlayerActionB"].started -= ShipActionB;
         pilotInput.actions["PlayerActionC"].started -= ShipActionC;
+        pilotInput.actions["BoostMovement"].started -= OnBoostedMovement;
         enabled = false;
     }
 
     private void OnEnable()
     {
         PlayerController.OnShipPiloted += pilotShip;
-        print("<color=pink> SpaceshipController enabled");
+        print("<color=magenta> SpaceshipController enabled");
     }
     private void OnDisable()
     {
         PlayerController.OnShipPiloted -= pilotShip;
-        print("<color=pink> Spaceship controller disabled");
+        print("<color=magenta> Spaceship controller disabled");
     }
 }

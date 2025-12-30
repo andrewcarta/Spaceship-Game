@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 2217311349632631334}
   - component: {fileID: 1303822018347656461}
   - component: {fileID: 596419396138107355}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -169,13 +169,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95c0c6ef16f0ad54fa3a3cac75938520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  playerInput: {fileID: 0}
   rb: {fileID: 2217311349632631334}
   cd: {fileID: 8537260843208843971}
-  sp: {fileID: 0}
-  moveInput: {fileID: 0}
-  actionAInput: {fileID: 0}
-  actionBInput: {fileID: 0}
-  actionCInput: {fileID: 0}
+  sp: {fileID: 2095623651001216604}
+  interactRayInclude:
+    serializedVersion: 2
+    m_Bits: 0
+  personalCamera: {fileID: 0}
+  boardedMask:
+    serializedVersion: 2
+    m_Bits: 0
+  AllRenderMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &596419396138107355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,6 +234,6 @@ MonoBehaviour:
     m_ActionName: 'VehicleControl/VehicleMove[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d,/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: PlayerControl
+  m_DefaultActionMap: GeneralControl
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
