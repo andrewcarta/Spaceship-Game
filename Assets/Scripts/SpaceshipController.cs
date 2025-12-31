@@ -110,7 +110,7 @@ public class ShipController : MonoBehaviour
                 if (pilotInput.actions["BoostMovement"].IsPressed()) { print("Boosted"); boostBonus = 2; boostersActive = true; } else { boostBonus = 1; boostersActive = false; }
                 //TODO Make 2 timers, one to count down while active and one to count down when it is done based upon the value of the timers(stamina and cooldown)
 
-                if (move.y > 0) { rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus) / shipScale; }
+                if (move.y > 0) { rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus); }
             }
             lastVelocity = rb.linearVelocity;
         }
@@ -132,7 +132,7 @@ public class ShipController : MonoBehaviour
             {
                     if ((moveAndFacingAngle.value < 45 && moveAndFacingAngle.value >= 0) || (moveAndFacingAngle.value > -45 && moveAndFacingAngle.value <= 0))
                     {
-                        rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus) / shipScale;
+                        rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus);
                     }
                     transform.Rotate(0f, 0f,Mathf.Clamp(facingAndMove,-shipTurnSpeed,shipTurnSpeed));
                     print("Move left");
@@ -142,7 +142,7 @@ public class ShipController : MonoBehaviour
             {
                     if ((moveAndFacingAngle.value < 45 && moveAndFacingAngle.value >= 0) || (moveAndFacingAngle.value > -45 && moveAndFacingAngle.value <= 0))
                     {
-                        rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus) / shipScale;
+                        rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus);
                     }
                     transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -shipTurnSpeed, shipTurnSpeed));
                     print("Move down");
@@ -152,7 +152,7 @@ public class ShipController : MonoBehaviour
             {
                     if ((moveAndFacingAngle.value < 45 && moveAndFacingAngle.value >= 0) || (moveAndFacingAngle.value > -45 && moveAndFacingAngle.value <= 0))
                     {
-                        rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus) / shipScale;
+                        rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus);
                     }
                     transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -shipTurnSpeed, shipTurnSpeed));
                     print("Move right");
@@ -162,7 +162,7 @@ public class ShipController : MonoBehaviour
             {
                     if ((moveAndFacingAngle.value < 45 && moveAndFacingAngle.value >= 0) || (moveAndFacingAngle.value > -45 && moveAndFacingAngle.value <= 0))
                     {
-                        rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus) / shipScale;
+                        rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus);
                     }
                     transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -shipTurnSpeed, shipTurnSpeed));
                     print("Move up");
