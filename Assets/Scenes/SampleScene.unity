@@ -2707,7 +2707,7 @@ MonoBehaviour:
   shipControls: {fileID: 291605286}
   shipScale: 5
   shipSpeed: 50
-  shipTurnSpeed: 8
+  shipTurnSpeed: 2
   shipArmor: 1
   shipHealth: 15
 --- !u!1 &1262117854
@@ -3503,7 +3503,7 @@ MonoBehaviour:
   shipControls: {fileID: 1451214247}
   shipScale: 10
   shipSpeed: 50
-  shipTurnSpeed: 6
+  shipTurnSpeed: 1
   shipArmor: 2
   shipHealth: 20
 --- !u!1 &1863657529

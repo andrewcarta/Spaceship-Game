@@ -88,12 +88,14 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = (move * (int)(stats.moveSpeed)) + shipVelocity;
     }
     private void rotateSprite() { 
-    Vector2 thisPos = transform.position;
-    Vector2 targetPos = thisPos+move;
-    float angle = Mathf.Atan2(move.y, move.x) * Mathf.Rad2Deg - 90;
-    if (move != Vector2.zero)
+        Vector2 thisPos = transform.position;
+        Vector2 targetPos = thisPos+move;
+        float angle = Mathf.Atan2(move.y, move.x) * Mathf.Rad2Deg - 90;
+        if (move != Vector2.zero)
         {
-            transform.rotation = Quaternion.Euler(0, 0, angle);
+            //x transform.rotation = Quaternion.Euler(0, 0, angle);
+            float facingAndMove = Vector2.SignedAngle(transform.up, move);
+            transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -12, 12));
         }
     }
 
