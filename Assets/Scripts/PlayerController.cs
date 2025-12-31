@@ -39,7 +39,6 @@ public class PlayerController : MonoBehaviour
     private GameObject currentShip;
     private GameObject mostRecentHit;
     private bool piloting;
-    public static event Action<GameObject> OnShipPiloted;
 
     //Input Actions
 
@@ -71,6 +70,13 @@ public class PlayerController : MonoBehaviour
 
     private void movePlayer(float delta)
     {
+        Vector2 shipVelocity = Vector2.zero;
+        if (boardedShip)
+        {
+            GameObject parent = this.transform.parent.gameObject;
+            ShipController shipScript = (ShipController)parent.GetComponent<MonoBehaviour>();
+            shipVelocity = shipScript.getShipVelocity();
+        }
         move = playerInput.actions["PlayerMove"].ReadValue<Vector2>();
         if (playerInput.actions["BoostMovement"].IsPressed() && dashCooldown <= 0 && move != Vector2.zero) {
             //TODO Add some particles for this
@@ -78,15 +84,18 @@ public class PlayerController : MonoBehaviour
             dashCooldown = 10;
         }
         dashCooldown -= delta;
-        rb.linearVelocity = move * (int)(stats.moveSpeed);
+
+        rb.linearVelocity = (move * (int)(stats.moveSpeed)) + shipVelocity;
     }
     private void rotateSprite() { 
-    Vector2 thisPos = transform.position;
-    Vector2 targetPos = thisPos+move;
-    float angle = Mathf.Atan2(move.y, move.x) * Mathf.Rad2Deg - 90;
-    if (move != Vector2.zero)
+        Vector2 thisPos = transform.position;
+        Vector2 targetPos = thisPos+move;
+        float angle = Mathf.Atan2(move.y, move.x) * Mathf.Rad2Deg - 90;
+        if (move != Vector2.zero)
         {
-            transform.rotation = Quaternion.Euler(0, 0, angle);
+            //x transform.rotation = Quaternion.Euler(0, 0, angle);
+            float facingAndMove = Vector2.SignedAngle(transform.up, move);
+            transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -12, 12));
         }
     }
 
@@ -131,10 +140,8 @@ public class PlayerController : MonoBehaviour
         {
             interactRay = Physics2D.Raycast(transform.position, move * 3, 3, interactRayInclude);
         }
-    //this raycast is no longer entirely accurate but is probably close
-    Debug.DrawRay(transform.position, move*3, Color.orangeRed,0.5f);
-
-
+        //this raycast is no longer entirely accurate but is probably close
+        Debug.DrawRay(transform.position, move*3, Color.orangeRed,0.5f);
     }
 
     //ALL methods linked to the inputMap and are called when the input happens (public so the methods can be used in other classes?)
@@ -161,8 +168,9 @@ public class PlayerController : MonoBehaviour
                 foreach (Transform child in parent)
                 {
                     if (child.CompareTag("Point") && child.gameObject.name.Contains("EntryPoint")) { 
-                        transform.position = child.position; 
+                        transform.position = child.position;
                         boardedShip = true;
+                        this.transform.parent = child.transform.parent;
                     }
                     //teleports the player to the entry point on the ship(no special effects happen for this yet)
                 }
@@ -176,7 +184,8 @@ public class PlayerController : MonoBehaviour
                 {
                     if (child.CompareTag("Point") && child.gameObject.name.Contains("ExitPoint")) { 
                         transform.position = child.position; 
-                        boardedShip = false; 
+                        boardedShip = false;
+                        this.transform.parent = null;
                     }
                 }
                 print("<color=yellow> Exited" + parent.name);
@@ -185,26 +194,20 @@ public class PlayerController : MonoBehaviour
             if (interactRayCollider.gameObject.name.Contains("ShipControls")) {
                 //! This is diff from exit and enter if statements so it will swap from player controller to ship controller
                 Transform parent = mostRecentHit.GetComponentInParent<Transform>().parent;
-                
+                //? vvv uses the code previous to find the shipController script and place it as an obj here
+                ShipController shipScript = (ShipController)parent.GetComponent<MonoBehaviour>();
                 parent.GetComponent<MonoBehaviour>().enabled = true;
                 print("Debug: enabled spaceshipController script");
-                
+                shipScript.pilotShip(this.gameObject,playerInput);
                 print("<color=yellow> Piloting" + parent.name);
-                OnShipPiloted.Invoke(this.gameObject);
                 enabled = false;
                 print("Debug: PlayerController deactivated");
-
-
-                
-
             }
 
 
         }}
 
-    private void OnBoostedMovement(InputAction.CallbackContext context) { 
-    
-    }
+    private void OnBoostedMovement(InputAction.CallbackContext context) { }
 
     private void getCurrentShip() {
         if (boardedShip) { 

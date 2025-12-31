@@ -7,7 +7,7 @@ public class cameraFollowPlayer : MonoBehaviour
     
     void Start()
     {
-        
+        playerToFollow = this.GetComponentInParent<Transform>().gameObject;
     }
 
     // Update is called once per frame

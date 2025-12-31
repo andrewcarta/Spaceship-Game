@@ -41,9 +41,9 @@ public class ShipController : MonoBehaviour
     private Transform pilotSeat;
     private GameObject pilot;
     private List<Transform> mainEngineSystem;
+    private Vector2 lastVelocity;
 
-
-
+    //TODO Make a method to assign values for ship size and possibly speed by default
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -65,7 +65,6 @@ public class ShipController : MonoBehaviour
                 
             }
         }
-
 
         print("<color=green> " + this.name + " spawned at " + gameObject.transform.position.x + " " + gameObject.transform.position.y);
         if (!piloted)
@@ -90,25 +89,91 @@ public class ShipController : MonoBehaviour
         }
         checkForCollsions();
     }
+    private void LateUpdate()
+    { 
+
+    }
 
 
-    //I do need to rework the rotation and movement for smoother movement for spaceship
-    //! This method will be reworked and some engine sorter will be made to allow for easy
     private void applyMovement()
     {
         //TODO Make the engines work slower at the start and faster later on
         move = pilotInput.actions["PlayerMove"].ReadValue<Vector2>();
         // Rotates the ship left and right(balanced by ship size to slow turning)
-        //TODO Make a method to assign values for ship size and possibly speed by default
-        //? Possibly change rotating to angularVelocity
-        transform.Rotate(new Vector3(0,0,-1 * move.x * (int)(shipTurnSpeed)/shipScale));
-        //applies a velocity on the ship pointing in the direction it is facing
-        if (move.y != 0)
+        //? Used when a keyboard is used to pilot
+        if (pilot.GetComponent<PlayerInput>().currentControlScheme.Equals("Keyboard"))
         {
-            if (pilotInput.actions["BoostMovement"].IsPressed()) { print("Boosyed"); boostBonus = 2; boostersActive = true; } else { boostBonus = 1; boostersActive = false; }
-            if (move.y > 0) { rb.linearVelocity = transform.up * (int)(shipSpeed*boostBonus) / shipScale; }
-            if (move.y < 0) { rb.linearVelocity = transform.up * -1 * (int)(shipSpeed*boostBonus)/(3*shipScale); }
+            transform.Rotate(0f,0f, Mathf.Clamp(-1 * move.x,-(int)(shipTurnSpeed),(int)(shipTurnSpeed)));
+            //applies a velocity on the ship pointing in the direction it is facing
+            if (move.y != 0)
+            {
+                if (pilotInput.actions["BoostMovement"].IsPressed()) { print("Boosted"); boostBonus = 2; boostersActive = true; } else { boostBonus = 1; boostersActive = false; }
+                //TODO Make 2 timers, one to count down while active and one to count down when it is done based upon the value of the timers(stamina and cooldown)
+
+                if (move.y > 0) { rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus) / shipScale; }
+            }
+            lastVelocity = rb.linearVelocity;
         }
+        //? Used when a controller is used to pilot
+        if (pilot.GetComponent<PlayerInput>().currentControlScheme.Equals("Controller"))
+        {
+            //!? NEED TO UPDATE WITH THE SAME THING AS THE KEYBOARD STUFF (MAYBE MAKE INTO A METHOD)
+            if (pilotInput.actions["BoostMovement"].IsPressed()) { print("Boosted"); boostBonus = 2; boostersActive = true; } else { boostBonus = 1; boostersActive = false; }
+            Angle moveAndFacingAngle = Vector2.SignedAngle(transform.up, move);
+            Angle unitCircleAngle = Vector2.SignedAngle(new Vector2(0, 1), move);
+            float facingAndMove = Vector2.SignedAngle(transform.up, move);
+            //! DEBUG LINE
+            print(unitCircleAngle.value);
+            //! if ship is turned to the right its rotation is - if to the left is pos but this doesn't work cause 360s
+            //if ship is facing up
+            if (!(move == Vector2.zero)) { 
+
+            if (unitCircleAngle.value > 45 && unitCircleAngle.value <= 135)
+            {
+                    if ((moveAndFacingAngle.value < 45 && moveAndFacingAngle.value >= 0) || (moveAndFacingAngle.value > -45 && moveAndFacingAngle.value <= 0))
+                    {
+                        rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus) / shipScale;
+                    }
+                    transform.Rotate(0f, 0f,Mathf.Clamp(facingAndMove,-shipTurnSpeed,shipTurnSpeed));
+                    print("Move left");
+            }
+            //if ship is facing down
+            if ((unitCircleAngle.value > 135 && unitCircleAngle.value <= 180) || (unitCircleAngle.value <= -135 && unitCircleAngle.value > -180))
+            {
+                    if ((moveAndFacingAngle.value < 45 && moveAndFacingAngle.value >= 0) || (moveAndFacingAngle.value > -45 && moveAndFacingAngle.value <= 0))
+                    {
+                        rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus) / shipScale;
+                    }
+                    transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -shipTurnSpeed, shipTurnSpeed));
+                    print("Move down");
+            }
+            //if ship is facing left
+            if (unitCircleAngle.value > -135 && unitCircleAngle.value <= -45)
+            {
+                    if ((moveAndFacingAngle.value < 45 && moveAndFacingAngle.value >= 0) || (moveAndFacingAngle.value > -45 && moveAndFacingAngle.value <= 0))
+                    {
+                        rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus) / shipScale;
+                    }
+                    transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -shipTurnSpeed, shipTurnSpeed));
+                    print("Move right");
+            }
+            //if ship if facing right
+            if ((unitCircleAngle.value > -45 && unitCircleAngle.value <= 0) || (unitCircleAngle.value >= 0 && unitCircleAngle.value <= 45))
+            {
+                    if ((moveAndFacingAngle.value < 45 && moveAndFacingAngle.value >= 0) || (moveAndFacingAngle.value > -45 && moveAndFacingAngle.value <= 0))
+                    {
+                        rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus) / shipScale;
+                    }
+                    transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -shipTurnSpeed, shipTurnSpeed));
+                    print("Move up");
+            }
+            }
+        }
+    }
+
+    //TODO Finish this and make it work properly so player isn't moved weirdly in the ship
+    public Vector2 getShipVelocity() {
+        return rb.linearVelocity;
     }
 
     //? This method will check for collisions with other ships and deal damage based on that
@@ -153,15 +218,17 @@ public class ShipController : MonoBehaviour
         {
             pilot.transform.position = pilotSeat.position;
             pilot.transform.rotation = this.transform.rotation;
+            pilot.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
         }
     }
 
     //? This method will be called to let the ship know who the pilot is when the ship starts to piloted
-    private void pilotShip(GameObject plt) {
+    public void pilotShip(GameObject plt, PlayerInput input) {
+        if (piloted) { swapPilot(plt,input); }
         enabled = true;
         pilot = plt;
         piloted = true;
-        pilotInput = plt.GetComponent<PlayerInput>();
+        pilotInput = input;
         print("Ship being piloted by " + plt.name);
         pilotInput.actions["PlayerActionA"].started += ShipActionA;
         pilotInput.actions["PlayerActionB"].started += ShipActionB;
@@ -172,22 +239,38 @@ public class ShipController : MonoBehaviour
         print("Ship unpiloted by " + pilot.name);
         pilot = null;
         piloted = false;
-        rb.linearVelocity = rb.linearVelocity / 100;
+        rb.linearVelocity = rb.linearVelocity / 10;
         pilotInput.actions["PlayerActionA"].started -= ShipActionA;
         pilotInput.actions["PlayerActionB"].started -= ShipActionB;
         pilotInput.actions["PlayerActionC"].started -= ShipActionC;
         pilotInput.actions["BoostMovement"].started -= OnBoostedMovement;
         enabled = false;
     }
+    private void swapPilot(GameObject newPlt, PlayerInput newInput) {
+        print("Ship pilot swapped from " + pilot.name+ " to " + newPlt);
+        pilot.gameObject.GetComponent<MonoBehaviour>().enabled = true;
+        pilot = newPlt;
+        piloted = true;
+        rb.linearVelocity = rb.linearVelocity / 10;
+        pilotInput.actions["PlayerActionA"].started -= ShipActionA;
+        pilotInput.actions["PlayerActionB"].started -= ShipActionB;
+        pilotInput.actions["PlayerActionC"].started -= ShipActionC;
+        pilotInput.actions["BoostMovement"].started -= OnBoostedMovement;
+        pilotInput = newInput;
+        pilotInput.actions["PlayerActionA"].started += ShipActionA;
+        pilotInput.actions["PlayerActionB"].started += ShipActionB;
+        pilotInput.actions["PlayerActionC"].started += ShipActionC;
+        pilotInput.actions["BoostMovement"].started += OnBoostedMovement;
+    }
 
     private void OnEnable()
     {
-        PlayerController.OnShipPiloted += pilotShip;
+
         print("<color=magenta> SpaceshipController enabled");
     }
     private void OnDisable()
     {
-        PlayerController.OnShipPiloted -= pilotShip;
+
         print("<color=magenta> Spaceship controller disabled");
     }
 }
