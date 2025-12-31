@@ -36,7 +36,7 @@ public class ShipController : MonoBehaviour
     //All ship stats and specs we can give an int value to
     private bool piloted;
     private bool boostersActive;
-    private int boostBonus = 1;
+    private float boostBonus = 1;
     private Vector2 move;
     private Transform pilotSeat;
     private GameObject pilot;
@@ -87,7 +87,6 @@ public class ShipController : MonoBehaviour
             applyMovement();
             lockPilotPos();
         }
-        checkForCollsions();
     }
     private void LateUpdate()
     { 
@@ -107,7 +106,7 @@ public class ShipController : MonoBehaviour
             //applies a velocity on the ship pointing in the direction it is facing
             if (move.y != 0)
             {
-                if (pilotInput.actions["BoostMovement"].IsPressed()) { print("Boosted"); boostBonus = 2; boostersActive = true; } else { boostBonus = 1; boostersActive = false; }
+                if (pilotInput.actions["BoostMovement"].IsPressed()) { print("Boosted"); boostBonus = 1.25f; boostersActive = true; } else { boostBonus = 1; boostersActive = false; }
                 //TODO Make 2 timers, one to count down while active and one to count down when it is done based upon the value of the timers(stamina and cooldown)
 
                 if (move.y > 0) { rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus); }
@@ -118,14 +117,10 @@ public class ShipController : MonoBehaviour
         if (pilot.GetComponent<PlayerInput>().currentControlScheme.Equals("Controller"))
         {
             //!? NEED TO UPDATE WITH THE SAME THING AS THE KEYBOARD STUFF (MAYBE MAKE INTO A METHOD)
-            if (pilotInput.actions["BoostMovement"].IsPressed()) { print("Boosted"); boostBonus = 2; boostersActive = true; } else { boostBonus = 1; boostersActive = false; }
+            if (pilotInput.actions["BoostMovement"].IsPressed()) { print("Boosted"); boostBonus = 1.25f; boostersActive = true; } else { boostBonus = 1; boostersActive = false; }
             Angle moveAndFacingAngle = Vector2.SignedAngle(transform.up, move);
             Angle unitCircleAngle = Vector2.SignedAngle(new Vector2(0, 1), move);
             float facingAndMove = Vector2.SignedAngle(transform.up, move);
-            //! DEBUG LINE
-            print(unitCircleAngle.value);
-            //! if ship is turned to the right its rotation is - if to the left is pos but this doesn't work cause 360s
-            //if ship is facing up
             if (!(move == Vector2.zero)) { 
 
             if (unitCircleAngle.value > 45 && unitCircleAngle.value <= 135)
@@ -135,7 +130,7 @@ public class ShipController : MonoBehaviour
                         rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus);
                     }
                     transform.Rotate(0f, 0f,Mathf.Clamp(facingAndMove,-shipTurnSpeed,shipTurnSpeed));
-                    print("Move left");
+                    
             }
             //if ship is facing down
             if ((unitCircleAngle.value > 135 && unitCircleAngle.value <= 180) || (unitCircleAngle.value <= -135 && unitCircleAngle.value > -180))
@@ -145,7 +140,7 @@ public class ShipController : MonoBehaviour
                         rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus);
                     }
                     transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -shipTurnSpeed, shipTurnSpeed));
-                    print("Move down");
+                    
             }
             //if ship is facing left
             if (unitCircleAngle.value > -135 && unitCircleAngle.value <= -45)
@@ -155,7 +150,7 @@ public class ShipController : MonoBehaviour
                         rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus);
                     }
                     transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -shipTurnSpeed, shipTurnSpeed));
-                    print("Move right");
+                    
             }
             //if ship if facing right
             if ((unitCircleAngle.value > -45 && unitCircleAngle.value <= 0) || (unitCircleAngle.value >= 0 && unitCircleAngle.value <= 45))
@@ -165,7 +160,7 @@ public class ShipController : MonoBehaviour
                         rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus);
                     }
                     transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -shipTurnSpeed, shipTurnSpeed));
-                    print("Move up");
+                    
             }
             }
         }
@@ -176,9 +171,31 @@ public class ShipController : MonoBehaviour
         return rb.linearVelocity;
     }
 
-    //? This method will check for collisions with other ships and deal damage based on that
-    private void checkForCollsions() { 
-    
+    //? This method will run when two things collide
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        //if a ship hits another ship
+        if (collision.transform.gameObject.CompareTag("Ship"))
+        {
+            Vector2 hitAt = collision.rigidbody.position;
+            Rigidbody2D hitRB = collision.rigidbody;
+            ShipController hitScript = (ShipController)collision.transform.gameObject.GetComponent<MonoBehaviour>();
+            //? Damages both ships based upon the speed of both ships and their armor
+            int speed = (int)(Mathf.Sqrt(Mathf.Pow(rb.linearVelocity.x,2)+Mathf.Pow(rb.linearVelocity.y,2)));
+            print(speed/10);
+            hitScript.damageShip(shipArmor+speed/10, hitAt);
+            //! This is broken and not properly giving the position of the point (or the other one is)
+            Vector2 hitUp = new Vector2(transform.up.x,transform.up.y);
+            Debug.DrawLine(hitAt,5*(hitAt+hitUp),UnityEngine.Color.purple);
+            hitRB.AddForceAtPosition(5* (hitAt + hitUp), hitAt,ForceMode2D.Impulse);
+            rb.AddForceAtPosition(-5* (hitAt + hitUp), hitAt,ForceMode2D.Impulse);
+            
+        }
+    }
+    //? This method will make an even bigger force explosion in the direction an obj is facing
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        
     }
 
 
@@ -220,6 +237,14 @@ public class ShipController : MonoBehaviour
             pilot.transform.rotation = this.transform.rotation;
             pilot.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
         }
+    }
+    public void damageShip(int damage, Vector2 damagePos) {
+        if (shipArmor < 0) { shipArmor = 0; }
+        shipHealth -= (damage-shipArmor);
+        shipArmor --;
+    }
+    public int getArmor() {
+        return shipArmor;
     }
 
     //? This method will be called to let the ship know who the pilot is when the ship starts to piloted

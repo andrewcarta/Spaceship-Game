@@ -93,7 +93,6 @@ public class PlayerController : MonoBehaviour
         float angle = Mathf.Atan2(move.y, move.x) * Mathf.Rad2Deg - 90;
         if (move != Vector2.zero)
         {
-            //x transform.rotation = Quaternion.Euler(0, 0, angle);
             float facingAndMove = Vector2.SignedAngle(transform.up, move);
             transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -12, 12));
         }
