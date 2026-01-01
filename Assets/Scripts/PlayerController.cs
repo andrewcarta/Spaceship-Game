@@ -68,6 +68,7 @@ public class PlayerController : MonoBehaviour
         checkRaycastContext();
         getCurrentShip();
     }
+    private void LateUpdate() { }
 
 
     private void movePlayer(float delta)
@@ -75,9 +76,11 @@ public class PlayerController : MonoBehaviour
         Vector2 shipVelocity = Vector2.zero;
         if (boardedShip)
         {
-            GameObject parent = this.transform.parent.gameObject;
+            GameObject parent = transform.parent.gameObject;
             ShipController shipScript = (ShipController)parent.GetComponent<MonoBehaviour>();
             shipVelocity = shipScript.getShipVelocity();
+            
+            //x rb.angularVelocity = shipScript.getShipAngVelocity();
         }
         move = playerInput.actions["PlayerMove"].ReadValue<Vector2>();
         //? The player can dash for 5 seconds and takes 5 secs to recharge but if only partially empty takes longer to charge
@@ -93,6 +96,7 @@ public class PlayerController : MonoBehaviour
         if (stamina >= 10) { stamina = 5; dashOnCooldown = false;}
 
         rb.linearVelocity = (move * (int)(stats.moveSpeed)) + shipVelocity;
+        
     }
     private void rotateSprite() { 
         Vector2 thisPos = transform.position;

@@ -45,11 +45,14 @@ public class ShipController : MonoBehaviour
     private Vector2 lastVelocity;
     private float stamina = 10;
     private bool boostOnCooldown;
+    //x private float lastAngle;
+    //x private float currentAngle;
 
     //TODO Make a method to assign values for ship size and possibly speed by default
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        //x lastAngle = transform.eulerAngles.z;
         //TODO It would be amazing to have smth to set all SerializeFields at game start code
         mainEngineSystem = new List<Transform>();
         move = Vector2.zero;
@@ -81,7 +84,6 @@ public class ShipController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
     }
     private void FixedUpdate()
     {
@@ -90,6 +92,7 @@ public class ShipController : MonoBehaviour
         {
             cameraLayerRenderSet();
             applyMovement();
+            //x simulateAngVelocity();
             lockPilotPos();
         }
     }
@@ -121,6 +124,9 @@ public class ShipController : MonoBehaviour
                 //TODO Make 2 timers, one to count down while active and one to count down when it is done based upon the value of the timers(stamina and cooldown)
 
                 if (move.y > 0) { rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus); }
+                //!? Alternate movement with forces
+                //if (move.y > 0) { rb.AddForce(transform.up * (int)(shipSpeed * 2 * boostBonus)*rb.mass,ForceMode2D.Force); }
+
                 activateEngineParticles();
             }
             lastVelocity = rb.linearVelocity;
@@ -129,7 +135,6 @@ public class ShipController : MonoBehaviour
         //? Used when a controller is used to pilot
         if (pilot.GetComponent<PlayerInput>().currentControlScheme.Equals("Controller"))
         {
-            //!? NEED TO UPDATE WITH THE SAME THING AS THE KEYBOARD STUFF (MAYBE MAKE INTO A METHOD)
             boostMovement();
             Angle moveAndFacingAngle = Vector2.SignedAngle(transform.up, move);
             Angle unitCircleAngle = Vector2.SignedAngle(new Vector2(0, 1), move);
@@ -144,10 +149,9 @@ public class ShipController : MonoBehaviour
                         activateEngineParticles();
                     }
                     transform.Rotate(0f, 0f,Mathf.Clamp(facingAndMove,-shipTurnSpeed,shipTurnSpeed));
-                    
-            }
-            //if ship is facing down
-            if ((unitCircleAngle.value > 135 && unitCircleAngle.value <= 180) || (unitCircleAngle.value <= -135 && unitCircleAngle.value > -180))
+                }
+                //if ship is facing down
+                if ((unitCircleAngle.value > 135 && unitCircleAngle.value <= 180) || (unitCircleAngle.value <= -135 && unitCircleAngle.value > -180))
             {
                     if ((moveAndFacingAngle.value < 45 && moveAndFacingAngle.value >= 0) || (moveAndFacingAngle.value > -45 && moveAndFacingAngle.value <= 0))
                     {
@@ -155,8 +159,7 @@ public class ShipController : MonoBehaviour
                         activateEngineParticles();
                     }
                     transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -shipTurnSpeed, shipTurnSpeed));
-                    
-            }
+                }
             //if ship is facing left
             if (unitCircleAngle.value > -135 && unitCircleAngle.value <= -45)
             {
@@ -166,8 +169,7 @@ public class ShipController : MonoBehaviour
                         activateEngineParticles();
                     }
                     transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -shipTurnSpeed, shipTurnSpeed));
-                    
-            }
+                }
             //if ship if facing right
             if ((unitCircleAngle.value > -45 && unitCircleAngle.value <= 0) || (unitCircleAngle.value >= 0 && unitCircleAngle.value <= 45))
             {
@@ -177,8 +179,7 @@ public class ShipController : MonoBehaviour
                         activateEngineParticles();
                     }
                     transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -shipTurnSpeed, shipTurnSpeed));
-                    
-            }
+                }
             }
             if (rb.linearVelocity == Vector2.zero) { deactivateEngineParticles(); }
         }
@@ -195,9 +196,24 @@ public class ShipController : MonoBehaviour
         if (boostOnCooldown == true) { if (stamina <= 0) { stamina = 0; } stamina += Time.deltaTime / 1f; }
         if (stamina >= 10) { stamina = 10; boostOnCooldown = false; }
     }
+    /*
+    private void simulateAngVelocity() {
+        currentAngle = transform.eulerAngles.z;
+        float deltaAngle = Mathf.DeltaAngle(lastAngle, currentAngle);
+        float angVelocity =  deltaAngle / Time.fixedDeltaTime;
+        rb.angularVelocity = angVelocity;
+        lastAngle = currentAngle;
+    }*/
+
     //TODO Finish this and make it work properly so player isn't moved weirdly in the ship
     public Vector2 getShipVelocity() {
-        return rb.linearVelocity;
+            return rb.linearVelocity;
+    }
+    public float getShipAngVelocity() {
+        return rb.angularVelocity;
+    }
+    public bool getIsPiloted() {
+        return piloted;
     }
 
     //? This method will run when two things collide mainly to deal damage as continuous collision will stop squishes
@@ -277,7 +293,8 @@ public class ShipController : MonoBehaviour
         {
             pilot.transform.position = pilotSeat.position;
             pilot.transform.rotation = this.transform.rotation;
-            pilot.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+            pilot.GetComponent<Rigidbody2D>().linearVelocity = rb.linearVelocity;
+            pilot.GetComponent<Rigidbody2D>().angularVelocity = rb.angularVelocity;
         }
     }
     public void damageShip(int damage, Vector2 damagePos) {
