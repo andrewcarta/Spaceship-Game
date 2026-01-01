@@ -3299,8 +3299,8 @@ MonoBehaviour:
   spTop: {fileID: 2072364148}
   shipControls: {fileID: 291605286}
   shipScale: 1
-  shipSpeed: 50
-  shipTurnSpeed: 5
+  shipSpeed: 45
+  shipTurnSpeed: 3
   shipArmor: 1
   shipHealth: 15
 --- !u!1 &1220290482
