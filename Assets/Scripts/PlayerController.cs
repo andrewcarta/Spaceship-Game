@@ -32,13 +32,14 @@ public class PlayerController : MonoBehaviour
     private enum stats : int { 
     moveSpeed = 10
     }
-    private float dashCooldown = 10;
+    private float stamina = 5;
     private Vector2 move;
     private Collider2D interactRayCollider;
     private bool boardedShip;
     private GameObject currentShip;
     private GameObject mostRecentHit;
     private bool piloting;
+    private bool dashOnCooldown;
 
     //Input Actions
 
@@ -47,6 +48,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         boardedShip = false;
+        piloting = false;
         
         move = Vector2.zero;
         print("<color=green> Player Spawned at "+gameObject.transform.position.x+" "+ gameObject.transform.position.y);
@@ -78,12 +80,17 @@ public class PlayerController : MonoBehaviour
             shipVelocity = shipScript.getShipVelocity();
         }
         move = playerInput.actions["PlayerMove"].ReadValue<Vector2>();
-        if (playerInput.actions["BoostMovement"].IsPressed() && dashCooldown <= 0 && move != Vector2.zero) {
+        //? The player can dash for 5 seconds and takes 5 secs to recharge but if only partially empty takes longer to charge
+        if (playerInput.actions["BoostMovement"].IsPressed() && stamina >= 0 && move != Vector2.zero && !dashOnCooldown)
+        {
             //TODO Add some particles for this
-            move *= 10;
-            dashCooldown = 5;
+            stamina -= Time.deltaTime;
+            move *= 2;
         }
-        dashCooldown -= delta;
+        else { if (stamina < 10) { stamina += Time.deltaTime / 1.25f; } }
+        if (stamina <= 0) { dashOnCooldown = true;}
+        if (dashOnCooldown == true) { if (stamina <= 0) { stamina = 0; } stamina += Time.deltaTime/1f; }
+        if (stamina >= 10) { stamina = 5; dashOnCooldown = false;}
 
         rb.linearVelocity = (move * (int)(stats.moveSpeed)) + shipVelocity;
     }
@@ -199,6 +206,7 @@ public class PlayerController : MonoBehaviour
                 print("Debug: enabled spaceshipController script");
                 shipScript.pilotShip(this.gameObject,playerInput);
                 print("<color=yellow> Piloting" + parent.name);
+                piloting = true;
                 enabled = false;
                 print("Debug: PlayerController deactivated");
             }
@@ -239,6 +247,7 @@ public class PlayerController : MonoBehaviour
     {
         print("Player controller enabled");
         //do the code: 'buttonName'.action.started += On+'buttonName'; to make a method instantiator for input method
+        piloting = false;
         playerInput.actions["PlayerActionA"].started += OnActionA;
         playerInput.actions["PlayerActionB"].started += OnActionB;
         playerInput.actions["PlayerActionC"].started += OnActionC;

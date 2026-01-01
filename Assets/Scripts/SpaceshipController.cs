@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
 using UnityEditor.Rendering;
 using UnityEngine;
@@ -42,6 +43,8 @@ public class ShipController : MonoBehaviour
     private GameObject pilot;
     private List<Transform> mainEngineSystem;
     private Vector2 lastVelocity;
+    private float stamina = 10;
+    private bool boostOnCooldown;
 
     //TODO Make a method to assign values for ship size and possibly speed by default
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -113,7 +116,7 @@ public class ShipController : MonoBehaviour
             //applies a velocity on the ship pointing in the direction it is facing
             if (move.y != 0)
             {
-                if (pilotInput.actions["BoostMovement"].IsPressed()) { print("Boosted"); boostBonus = 1.25f; boostersActive = true; } else { boostBonus = 1; boostersActive = false; }
+                boostMovement();
                 //TODO Make 2 timers, one to count down while active and one to count down when it is done based upon the value of the timers(stamina and cooldown)
 
                 if (move.y > 0) { rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus); }
@@ -124,7 +127,7 @@ public class ShipController : MonoBehaviour
         if (pilot.GetComponent<PlayerInput>().currentControlScheme.Equals("Controller"))
         {
             //!? NEED TO UPDATE WITH THE SAME THING AS THE KEYBOARD STUFF (MAYBE MAKE INTO A METHOD)
-            if (pilotInput.actions["BoostMovement"].IsPressed()) { print("Boosted"); boostBonus = 1.25f; boostersActive = true; } else { boostBonus = 1; boostersActive = false; }
+            boostMovement();
             Angle moveAndFacingAngle = Vector2.SignedAngle(transform.up, move);
             Angle unitCircleAngle = Vector2.SignedAngle(new Vector2(0, 1), move);
             float facingAndMove = Vector2.SignedAngle(transform.up, move);
@@ -172,31 +175,47 @@ public class ShipController : MonoBehaviour
             }
         }
     }
-
+    private void boostMovement() {
+        if (pilotInput.actions["BoostMovement"].IsPressed() && stamina >= 0 && move != Vector2.zero && !boostOnCooldown)
+        {
+            //TODO Add some extra engine particles for this
+            stamina -= Time.deltaTime;
+            boostBonus = 2;
+        }
+        else { if (stamina < 10) { stamina += Time.deltaTime / 1.25f;boostBonus = 1; } }
+        if (stamina <= 0) { boostOnCooldown = true; boostBonus = 1; }
+        if (boostOnCooldown == true) { if (stamina <= 0) { stamina = 0; } stamina += Time.deltaTime / 1f; }
+        if (stamina >= 10) { stamina = 10; boostOnCooldown = false; }
+    }
     //TODO Finish this and make it work properly so player isn't moved weirdly in the ship
     public Vector2 getShipVelocity() {
         return rb.linearVelocity;
     }
 
-    //? This method will run when two things collide
+    //? This method will run when two things collide mainly to deal damage as continuous collision will stop squishes
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        
+        Vector2 hitAt = collision.rigidbody.position;
+        Rigidbody2D hitRB = collision.rigidbody;
+        GameObject collisionObj = collision.transform.gameObject;
+
         //if a ship hits another ship
-        if (collision.transform.gameObject.CompareTag("Ship"))
+        if (collisionObj.CompareTag("Ship"))
         {
-            Vector2 hitAt = collision.rigidbody.position;
-            Rigidbody2D hitRB = collision.rigidbody;
-            ShipController hitScript = (ShipController)collision.transform.gameObject.GetComponent<MonoBehaviour>();
-            //? Damages both ships based upon the speed of both ships and their armor
-            int speed = (int)(Mathf.Sqrt(Mathf.Pow(rb.linearVelocity.x,2)+Mathf.Pow(rb.linearVelocity.y,2)));
-            print(speed/10);
-            hitScript.damageShip(shipArmor+speed/10, hitAt);
-            //! This is broken and not properly giving the position of the point (or the other one is)
-            Vector2 hitUp = new Vector2(transform.up.x,transform.up.y);
-            Debug.DrawLine(hitAt,5*(hitAt+hitUp),UnityEngine.Color.purple);
-            hitRB.AddForceAtPosition(5* (hitAt + hitUp), hitAt,ForceMode2D.Impulse);
-            rb.AddForceAtPosition(-5* (hitAt + hitUp), hitAt,ForceMode2D.Impulse);
             
+        }
+        else 
+        //? if the ship hits anything else
+        //TODO can specialize an if statement to damage player later if I want
+        {
+            if (collisionObj.transform.parent != null && collisionObj.transform.parent.Equals(this.transform))
+            {
+                
+            }
+            else {
+                
+            }
         }
     }
     //? This method will make an even bigger force explosion in the direction an obj is facing
