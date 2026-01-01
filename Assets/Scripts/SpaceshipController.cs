@@ -61,14 +61,15 @@ public class ShipController : MonoBehaviour
                 pilotSeat = child.transform;
             }
             //All ships will have a main engine system so I can use them to list off the engine points
-            if (child.name.Contains("MainEngineSystem")){
-                foreach (Transform enginePoint in transform) { 
+            if (child.name.Contains("EngineSystem")){
+                foreach (Transform enginePoint in child) { 
                 mainEngineSystem.Add(enginePoint);
+                    print("Added Engine "+enginePoint.name);
                 }
                 
             }
         }
-
+        deactivateEngineParticles();
         print("<color=green> " + this.name + " spawned at " + gameObject.transform.position.x + " " + gameObject.transform.position.y);
         if (!piloted)
         {
@@ -120,8 +121,10 @@ public class ShipController : MonoBehaviour
                 //TODO Make 2 timers, one to count down while active and one to count down when it is done based upon the value of the timers(stamina and cooldown)
 
                 if (move.y > 0) { rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus); }
+                activateEngineParticles();
             }
             lastVelocity = rb.linearVelocity;
+            deactivateEngineParticles();
         }
         //? Used when a controller is used to pilot
         if (pilot.GetComponent<PlayerInput>().currentControlScheme.Equals("Controller"))
@@ -138,6 +141,7 @@ public class ShipController : MonoBehaviour
                     if ((moveAndFacingAngle.value < 45 && moveAndFacingAngle.value >= 0) || (moveAndFacingAngle.value > -45 && moveAndFacingAngle.value <= 0))
                     {
                         rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus);
+                        activateEngineParticles();
                     }
                     transform.Rotate(0f, 0f,Mathf.Clamp(facingAndMove,-shipTurnSpeed,shipTurnSpeed));
                     
@@ -148,6 +152,7 @@ public class ShipController : MonoBehaviour
                     if ((moveAndFacingAngle.value < 45 && moveAndFacingAngle.value >= 0) || (moveAndFacingAngle.value > -45 && moveAndFacingAngle.value <= 0))
                     {
                         rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus);
+                        activateEngineParticles();
                     }
                     transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -shipTurnSpeed, shipTurnSpeed));
                     
@@ -158,6 +163,7 @@ public class ShipController : MonoBehaviour
                     if ((moveAndFacingAngle.value < 45 && moveAndFacingAngle.value >= 0) || (moveAndFacingAngle.value > -45 && moveAndFacingAngle.value <= 0))
                     {
                         rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus);
+                        activateEngineParticles();
                     }
                     transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -shipTurnSpeed, shipTurnSpeed));
                     
@@ -168,11 +174,13 @@ public class ShipController : MonoBehaviour
                     if ((moveAndFacingAngle.value < 45 && moveAndFacingAngle.value >= 0) || (moveAndFacingAngle.value > -45 && moveAndFacingAngle.value <= 0))
                     {
                         rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus);
+                        activateEngineParticles();
                     }
                     transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -shipTurnSpeed, shipTurnSpeed));
                     
             }
             }
+            if (rb.linearVelocity == Vector2.zero) { deactivateEngineParticles(); }
         }
     }
     private void boostMovement() {
@@ -255,7 +263,15 @@ public class ShipController : MonoBehaviour
     private void OnBoostedMovement(InputAction.CallbackContext context) {
         boostersActive = pilotInput.actions["BoostMovement"].triggered;
     }
-    
+    //? use mainEngineSystem list(an array basically) to find the engines and toggle on and off the particle systems
+    //! Currently having issues with specificEngine.gameObj.getComponent<ParticleSystem>() not returning the particleSystem
+    private void deactivateEngineParticles() {
+        
+    }
+    private void activateEngineParticles()
+    {
+        
+    }
     private void lockPilotPos() {
         if (pilotSeat != null && pilot != null)
         {
@@ -299,6 +315,7 @@ public class ShipController : MonoBehaviour
         pilotInput.actions["PlayerActionC"].started -= ShipActionC;
         pilotInput.actions["BoostMovement"].started -= OnBoostedMovement;
         enabled = false;
+        deactivateEngineParticles();
     }
     private void swapPilot(GameObject newPlt, PlayerInput newInput) {
         print("Ship pilot swapped from " + pilot.name+ " to " + newPlt);
@@ -315,6 +332,7 @@ public class ShipController : MonoBehaviour
         pilotInput.actions["PlayerActionB"].started += ShipActionB;
         pilotInput.actions["PlayerActionC"].started += ShipActionC;
         pilotInput.actions["BoostMovement"].started += OnBoostedMovement;
+        deactivateEngineParticles();
     }
 
     private void OnEnable()
@@ -324,7 +342,7 @@ public class ShipController : MonoBehaviour
     }
     private void OnDisable()
     {
-
+        deactivateEngineParticles();
         print("<color=magenta> Spaceship controller disabled");
     }
 }
