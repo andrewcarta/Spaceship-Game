@@ -43,7 +43,7 @@ Camera:
   m_GameObject: {fileID: 1006282382525922896}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 4
+  m_ClearFlags: 2
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -141,7 +141,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee45bdd30732e5a43ae7580e9748eb93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::cameraFollowPlayer
-  playerToFollow: {fileID: 2446455801683667639}
 --- !u!1 &2446455801683667639
 GameObject:
   m_ObjectHideFlags: 0

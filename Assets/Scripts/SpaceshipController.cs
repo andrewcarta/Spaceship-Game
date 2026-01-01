@@ -84,6 +84,7 @@ public class ShipController : MonoBehaviour
         
         if (piloted)
         {
+            cameraLayerRenderSet();
             applyMovement();
             lockPilotPos();
         }
@@ -91,6 +92,12 @@ public class ShipController : MonoBehaviour
     private void LateUpdate()
     { 
 
+    }
+
+    private void cameraLayerRenderSet() {
+        PlayerController pilotScript = (PlayerController)pilot.GetComponent<MonoBehaviour>();
+        LayerMask AllRenderMask = -1;
+        pilotScript.getPersonalCamera().cullingMask = AllRenderMask;
     }
 
 

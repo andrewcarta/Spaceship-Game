@@ -10,8 +10,8 @@ public class cameraFollowPlayer : MonoBehaviour
     {
         
         playerToFollow = this.transform.parent.gameObject;
-        print("<color=red>" + playerToFollow.name);
-        print("<color=red>"+ playerToFollow.GetComponent<MonoBehaviour>());
+        //x print("<color=red>" + playerToFollow.name);
+        //x print("<color=red>"+ playerToFollow.GetComponent<MonoBehaviour>());
         playerFollowingScript = (PlayerController)playerToFollow.GetComponent<MonoBehaviour>();
     }
 
@@ -29,7 +29,7 @@ public class cameraFollowPlayer : MonoBehaviour
         this.transform.position = new Vector3(playerToFollow.transform.position.x,playerToFollow.transform.position.y,-10);
         this.transform.rotation = Quaternion.identity;
         //? Should scale out the camera based upon the ship scale
-        if (playerFollowingScript != null && playerFollowingScript.getCurrentShip() != null)
+        if (playerFollowingScript != null && playerFollowingScript.getCurrentShip() != null && playerFollowingScript.getPiloting())
         {
             ShipController shipScript = (ShipController)playerFollowingScript.getCurrentShip().GetComponent<MonoBehaviour>();
             this.GetComponent<Camera>().orthographicSize = 25 * shipScript.getScale();

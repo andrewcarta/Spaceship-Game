@@ -215,10 +215,23 @@ public class PlayerController : MonoBehaviour
         }
         return null;
     }
+    public bool getPiloting() { 
+    return piloting;
+    }
+    public Camera getPersonalCamera() { return personalCamera; }
     
     private void cameraLayerRenderSet()
     {
-        if (boardedShip) { personalCamera.cullingMask = boardedMask; }
+        if (boardedShip) 
+        {
+            if (piloting) 
+            {
+                personalCamera.cullingMask = AllRenderMask;
+            }
+            else {
+                personalCamera.cullingMask = boardedMask; 
+            }
+        }
         else { personalCamera.cullingMask = AllRenderMask; }
     }
 
