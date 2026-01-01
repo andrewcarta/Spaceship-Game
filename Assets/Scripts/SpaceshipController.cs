@@ -246,6 +246,9 @@ public class ShipController : MonoBehaviour
     public int getArmor() {
         return shipArmor;
     }
+    public int getScale() { 
+    return shipScale;
+    }
 
     //? This method will be called to let the ship know who the pilot is when the ship starts to piloted
     public void pilotShip(GameObject plt, PlayerInput input) {

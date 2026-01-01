@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 462756}
   m_Layer: 0
   m_Name: EnginePoint
-  m_TagString: Untagged
+  m_TagString: Point
   m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -284,7 +284,7 @@ GameObject:
   - component: {fileID: 174516401}
   m_Layer: 0
   m_Name: Ship Blaster Point (1)
-  m_TagString: Untagged
+  m_TagString: Point
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -436,7 +436,7 @@ SpriteRenderer:
   m_SmallMeshCulling: 1
   m_ForceMeshLod: -1
   m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 2
+  m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
@@ -460,7 +460,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -10
+  m_SortingOrder: 0
   m_Sprite: {fileID: 4490714175435172305, guid: b9ff70b2916090443a78f4f52ee85393, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -774,7 +774,7 @@ SpriteRenderer:
   m_SmallMeshCulling: 1
   m_ForceMeshLod: -1
   m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 2
+  m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
@@ -798,7 +798,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -10
+  m_SortingOrder: 0
   m_Sprite: {fileID: 4490714175435172305, guid: b9ff70b2916090443a78f4f52ee85393, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -821,7 +821,7 @@ GameObject:
   - component: {fileID: 357361346}
   m_Layer: 0
   m_Name: Ship Blaster Point (1)
-  m_TagString: Untagged
+  m_TagString: Point
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1061,7 +1061,7 @@ SpriteRenderer:
   m_SmallMeshCulling: 1
   m_ForceMeshLod: -1
   m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 2
+  m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
@@ -1085,7 +1085,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -10
+  m_SortingOrder: 0
   m_Sprite: {fileID: 4490714175435172305, guid: b9ff70b2916090443a78f4f52ee85393, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1186,7 +1186,7 @@ GameObject:
   - component: {fileID: 488350879}
   m_Layer: 0
   m_Name: Ship Blaster Point
-  m_TagString: Untagged
+  m_TagString: Point
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1260,7 +1260,7 @@ SpriteRenderer:
   m_SmallMeshCulling: 1
   m_ForceMeshLod: -1
   m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 2
+  m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
@@ -1284,7 +1284,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -10
+  m_SortingOrder: 0
   m_Sprite: {fileID: 4490714175435172305, guid: b9ff70b2916090443a78f4f52ee85393, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -2212,7 +2212,7 @@ GameObject:
   - component: {fileID: 661026511}
   m_Layer: 0
   m_Name: EnginePoint (5)
-  m_TagString: Untagged
+  m_TagString: Point
   m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2357,7 +2357,7 @@ GameObject:
   - component: {fileID: 687654426}
   m_Layer: 0
   m_Name: EnginePoint (1)
-  m_TagString: Untagged
+  m_TagString: Point
   m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3128,7 +3128,7 @@ GameObject:
   - component: {fileID: 989316770}
   m_Layer: 0
   m_Name: EnginePoint
-  m_TagString: Untagged
+  m_TagString: Point
   m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3159,7 +3159,7 @@ GameObject:
   - component: {fileID: 1010304855}
   m_Layer: 0
   m_Name: EnginePoint (2)
-  m_TagString: Untagged
+  m_TagString: Point
   m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3298,7 +3298,7 @@ MonoBehaviour:
   spBase: {fileID: 621353322}
   spTop: {fileID: 2072364148}
   shipControls: {fileID: 291605286}
-  shipScale: 1
+  shipScale: 5
   shipSpeed: 50
   shipTurnSpeed: 2
   shipArmor: 1
@@ -3339,7 +3339,7 @@ MonoBehaviour:
   spBase: {fileID: 1883063180}
   spTop: {fileID: 2146540419}
   shipControls: {fileID: 1842506750}
-  shipScale: 3
+  shipScale: 10
   shipSpeed: 35
   shipTurnSpeed: 3
   shipArmor: 5
@@ -3530,7 +3530,7 @@ GameObject:
   - component: {fileID: 1317266493}
   m_Layer: 0
   m_Name: EnginePoint (3)
-  m_TagString: Untagged
+  m_TagString: Point
   m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3592,7 +3592,7 @@ GameObject:
   - component: {fileID: 1413010476}
   m_Layer: 0
   m_Name: EnginePoint (4)
-  m_TagString: Untagged
+  m_TagString: Point
   m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3623,7 +3623,7 @@ GameObject:
   - component: {fileID: 1418529602}
   m_Layer: 0
   m_Name: Ship Blaster Point
-  m_TagString: Untagged
+  m_TagString: Point
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3834,7 +3834,7 @@ SpriteRenderer:
   m_SmallMeshCulling: 1
   m_ForceMeshLod: -1
   m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 2
+  m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
@@ -3858,7 +3858,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -10
+  m_SortingOrder: 0
   m_Sprite: {fileID: 4490714175435172305, guid: b9ff70b2916090443a78f4f52ee85393, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -4574,7 +4574,7 @@ MonoBehaviour:
   spBase: {fileID: 942055630}
   spTop: {fileID: 1708994480}
   shipControls: {fileID: 1451214247}
-  shipScale: 2
+  shipScale: 10
   shipSpeed: 50
   shipTurnSpeed: 1
   shipArmor: 2
@@ -4838,7 +4838,7 @@ SpriteRenderer:
   m_SmallMeshCulling: 1
   m_ForceMeshLod: -1
   m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 2
+  m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
@@ -4862,7 +4862,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -10
+  m_SortingOrder: 0
   m_Sprite: {fileID: 4490714175435172305, guid: b9ff70b2916090443a78f4f52ee85393, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -6222,7 +6222,7 @@ PolygonCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 0
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2

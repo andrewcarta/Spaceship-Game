@@ -80,8 +80,8 @@ public class PlayerController : MonoBehaviour
         move = playerInput.actions["PlayerMove"].ReadValue<Vector2>();
         if (playerInput.actions["BoostMovement"].IsPressed() && dashCooldown <= 0 && move != Vector2.zero) {
             //TODO Add some particles for this
-            move *= 5;
-            dashCooldown = 10;
+            move *= 10;
+            dashCooldown = 5;
         }
         dashCooldown -= delta;
 
@@ -208,11 +208,12 @@ public class PlayerController : MonoBehaviour
 
     private void OnBoostedMovement(InputAction.CallbackContext context) { }
 
-    private void getCurrentShip() {
+    public GameObject getCurrentShip() {
         if (boardedShip) { 
         Transform parent = mostRecentHit.GetComponentInParent<Transform>().parent;
-        if (parent.CompareTag("Ship")) { currentShip = parent.gameObject; }
+        if (parent.CompareTag("Ship")) { currentShip = parent.gameObject; return currentShip; }
         }
+        return null;
     }
     
     private void cameraLayerRenderSet()
