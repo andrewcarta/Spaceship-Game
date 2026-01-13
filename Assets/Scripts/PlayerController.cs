@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Camera personalCamera;
     [SerializeField] private LayerMask boardedMask;
     [SerializeField] private LayerMask AllRenderMask;
+    [SerializeField] private LayerMask shipCeilingMask;
 
     //All player stats and specs we can give an int value to
     private enum stats : int { 
@@ -40,6 +41,8 @@ public class PlayerController : MonoBehaviour
     private GameObject mostRecentHit;
     private bool piloting;
     private bool dashOnCooldown;
+    private ShipController shipScript;
+    private Vector2 lastPos;
 
     //Input Actions
 
@@ -47,6 +50,7 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        lastPos = transform.position;
         boardedShip = false;
         piloting = false;
         
@@ -62,11 +66,12 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         cameraLayerRenderSet();
+        getCurrentShip();
         movePlayer(Time.deltaTime);
         rotateSprite();
         targetRaycasts();
         checkRaycastContext();
-        getCurrentShip();
+        lastPos = transform.position;
     }
     private void LateUpdate() { }
 
@@ -74,13 +79,11 @@ public class PlayerController : MonoBehaviour
     private void movePlayer(float delta)
     {
         Vector2 shipVelocity = Vector2.zero;
+        getCurrentShip();
         if (boardedShip)
         {
-            GameObject parent = transform.parent.gameObject;
-            ShipController shipScript = (ShipController)parent.GetComponent<MonoBehaviour>();
+            shipScript = (ShipController)currentShip.GetComponent<MonoBehaviour>();
             shipVelocity = shipScript.getShipVelocity();
-            
-            //x rb.angularVelocity = shipScript.getShipAngVelocity();
         }
         move = playerInput.actions["PlayerMove"].ReadValue<Vector2>();
         //? The player can dash for 5 seconds and takes 5 secs to recharge but if only partially empty takes longer to charge
@@ -117,7 +120,6 @@ public class PlayerController : MonoBehaviour
             //An obj needs to be on the interactable layer to be seen by the raycast (also colliders on base layer are included to block the raycasts so no through wall interactions)
             if (interactRay.collider.CompareTag("Enter"))
             {
-                //When ANY interaction that says enter exists there will be a parent with other nodes to use to enter
 
                 //print("At enter point");
                 
@@ -142,7 +144,7 @@ public class PlayerController : MonoBehaviour
         interactRayCollider = null;
         return null;
         }
-
+        
     }
 
     private void targetRaycasts() {
@@ -169,47 +171,52 @@ public class PlayerController : MonoBehaviour
         if (interactRayCollider != null)
         {
             print(interactRayCollider.gameObject.name);
-            if (interactRayCollider.gameObject.name.Contains("EnterArea")) { 
-                
-                //gets the parent of the interaction point by using transform component
-                Transform parent = mostRecentHit.GetComponentInParent<Transform>().parent;
-                //brings the player into the ship on the ship entry point's coords
-                //Maybe for bigger ships rework the system a little to make an array of all and pick the closest one to put them in
-                foreach (Transform child in parent)
-                {
+            if (interactRayCollider.gameObject.name.Contains("EnterArea")) {
+
+                //! TO rework for full physics give the ShipController class this object with a method to add them to an array of boarded people
+                //! Also save the shipScript as a class var in player class for getting rb physics
+                /*
+                gets the parent of the interaction point by using transform component
+                brings the player into the ship on the ship entry point's coords
+                Maybe for bigger ships rework the system a little to make an array of all and pick the closest one to put them in
+                */
+                GameObject hitShip = mostRecentHit.transform.parent.gameObject;
+                print("Entering " +hitShip.name);
+                shipScript = (ShipController)hitShip.GetComponent<MonoBehaviour>();
+                foreach(Transform child in hitShip.transform) {
                     if (child.CompareTag("Point") && child.gameObject.name.Contains("EntryPoint")) { 
-                        transform.position = child.position;
-                        boardedShip = true;
-                        this.transform.parent = child.transform.parent;
+                    this.transform.position = child.transform.position;
+                    boardedShip = true;
                     }
-                    //teleports the player to the entry point on the ship(no special effects happen for this yet)
+                
                 }
-                print("<color=yellow> Entered" + parent.name);
+                currentShip = hitShip;
+                shipScript.addPassenger(this.transform);
+                print("<color=yellow> Entered" + currentShip.name);
             }
 
             if (interactRayCollider.gameObject.name.Contains("ExitArea")) { 
-                
-                Transform parent = mostRecentHit.GetComponentInParent<Transform>().parent;
-                foreach (Transform child in parent)
+                shipScript = (ShipController)currentShip.GetComponent<MonoBehaviour>();
+                shipScript.removePassenger(this.transform);
+                foreach (Transform child in currentShip.transform)
                 {
                     if (child.CompareTag("Point") && child.gameObject.name.Contains("ExitPoint")) { 
                         transform.position = child.position; 
                         boardedShip = false;
-                        this.transform.parent = null;
                     }
                 }
-                print("<color=yellow> Exited" + parent.name);
+                print("<color=yellow> Exited" + currentShip.name);
             }
 
             if (interactRayCollider.gameObject.name.Contains("ShipControls")) {
                 //! This is diff from exit and enter if statements so it will swap from player controller to ship controller
-                Transform parent = mostRecentHit.GetComponentInParent<Transform>().parent;
-                //? vvv uses the code previous to find the shipController script and place it as an obj here
-                ShipController shipScript = (ShipController)parent.GetComponent<MonoBehaviour>();
-                parent.GetComponent<MonoBehaviour>().enabled = true;
+                //? Collects the ship's script to use for the player to pilot the ship
+                shipScript = (ShipController)currentShip.GetComponent<MonoBehaviour>();
+                //TODO Change the code so the ship only overrides the player controls when they are piloting and it adds/subtrascts them from the list when it is piloted/unpiloted
+                shipScript.enabled = true;
                 print("Debug: enabled spaceshipController script");
                 shipScript.pilotShip(this.gameObject,playerInput);
-                print("<color=yellow> Piloting" + parent.name);
+                print("<color=yellow> Piloting" + currentShip.name);
                 piloting = true;
                 enabled = false;
                 print("Debug: PlayerController deactivated");
@@ -221,15 +228,29 @@ public class PlayerController : MonoBehaviour
     private void OnBoostedMovement(InputAction.CallbackContext context) { }
 
     public GameObject getCurrentShip() {
+        if (Mathf.Abs(lastPos.x-transform.position.x) > 0.01 && Mathf.Abs(lastPos.y - transform.position.y) > 0.01) {
+            RaycastHit2D ray = Physics2D.Raycast(transform.position, transform.position, 1, shipCeilingMask);
+            if (ray.collider != null)
+            {
+                currentShip = ray.collider.transform.parent.gameObject;
+                shipScript = (ShipController)currentShip.GetComponent<MonoBehaviour>();
+                //!? debug print(currentShip.name);
+                return currentShip;
+            }
+            else { if (!piloting) { return currentShip; }
+                else { shipScript = null; currentShip = null; return null; } }
+        }
+        else { return currentShip; }
+        //! LayerMask(256)
+        /*
         if (boardedShip) { 
         Transform parent = mostRecentHit.GetComponentInParent<Transform>().parent;
         if (parent.CompareTag("Ship")) { currentShip = parent.gameObject; return currentShip; }
         }
         return null;
+        */
     }
-    public bool getPiloting() { 
-    return piloting;
-    }
+    public bool getPiloting() { return piloting;}
     public Camera getPersonalCamera() { return personalCamera; }
     
     private void cameraLayerRenderSet()

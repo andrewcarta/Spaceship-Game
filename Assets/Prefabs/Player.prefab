@@ -325,6 +325,9 @@ MonoBehaviour:
   AllRenderMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  shipCeilingMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &596419396138107355
 MonoBehaviour:
   m_ObjectHideFlags: 0

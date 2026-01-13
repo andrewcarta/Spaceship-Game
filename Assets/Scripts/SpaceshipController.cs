@@ -42,9 +42,11 @@ public class ShipController : MonoBehaviour
     private Transform pilotSeat;
     private GameObject pilot;
     private List<Transform> mainEngineSystem;
+    private List<Transform> passengersList;
     private Vector2 lastVelocity;
     private float stamina = 10;
     private bool boostOnCooldown;
+    private bool shipBeingDamaged = false;
     //x private float lastAngle;
     //x private float currentAngle;
 
@@ -52,6 +54,7 @@ public class ShipController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        passengersList = new List<Transform>();
         //x lastAngle = transform.eulerAngles.z;
         //TODO It would be amazing to have smth to set all SerializeFields at game start code
         mainEngineSystem = new List<Transform>();
@@ -74,6 +77,7 @@ public class ShipController : MonoBehaviour
         }
         deactivateEngineParticles();
         print("<color=green> " + this.name + " spawned at " + gameObject.transform.position.x + " " + gameObject.transform.position.y);
+        //! I def don't need to disable the script if I choose to enact safegruards blocking the input if no pilot is found
         if (!piloted)
         {
             print("<color=magenta> No initial pilot, disabling SpaceshipController");
@@ -215,6 +219,15 @@ public class ShipController : MonoBehaviour
     public bool getIsPiloted() {
         return piloted;
     }
+    public void addPassenger(Transform methodCallPlayer) {
+        passengersList.Add(methodCallPlayer);
+    }
+    public void removePassenger(Transform methodCallPlayer)
+    {
+        if (passengersList.Contains(methodCallPlayer)){
+            passengersList.Remove(methodCallPlayer); 
+        }
+    }
 
     //? This method will run when two things collide mainly to deal damage as continuous collision will stop squishes
     private void OnCollisionEnter2D(Collision2D collision)
@@ -227,7 +240,7 @@ public class ShipController : MonoBehaviour
         //if a ship hits another ship
         if (collisionObj.CompareTag("Ship"))
         {
-            
+            shipBeingDamaged = true;
         }
         else 
         //? if the ship hits anything else
@@ -245,9 +258,17 @@ public class ShipController : MonoBehaviour
     //? This method will make an even bigger force explosion in the direction an obj is facing
     private void OnCollisionStay2D(Collision2D collision)
     {
-        
+        GameObject collisionObj = collision.transform.gameObject;
+        if (collisionObj.CompareTag("Ship"))
+        {
+            shipBeingDamaged = true;
+        }
     }
 
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        shipBeingDamaged = false;
+    }
 
     private void targetRaycasts()
     {
