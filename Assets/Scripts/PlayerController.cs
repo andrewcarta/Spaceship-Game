@@ -193,12 +193,20 @@ public class PlayerController : MonoBehaviour
                 foreach (Transform child in parent)
                 {
                     if (child.CompareTag("Point") && child.gameObject.name.Contains("ExitPoint")) { 
-                        transform.position = child.position; 
-                        boardedShip = false;
-                        this.transform.parent = null;
+                        //TODO Make this code check a circle(r<=1) around the point for best value
+                        RaycastHit2D exitChecker = Physics2D.Raycast(child.transform.position, child.transform.position, 2, interactRayInclude);
+                        if(exitChecker.collider != null){print("Player shouldn't exit"); }
+                        //else{}
+                        //! Currently the code is giving false positives and that needs to be fixed(due to space being there[make a new mask elxuding supership stuff mebe?])
+                            transform.position = child.position; 
+                            boardedShip = false;
+                            this.transform.parent = null;
+                            print("<color=yellow> Exited" + parent.name);
+                        
+                        
                     }
                 }
-                print("<color=yellow> Exited" + parent.name);
+                
             }
 
             if (interactRayCollider.gameObject.name.Contains("ShipControls")) {
