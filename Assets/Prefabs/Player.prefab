@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6612292125278352369}
   - component: {fileID: 4293084402007703228}
   - component: {fileID: 156036470563654410}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Personal Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -155,7 +155,7 @@ GameObject:
   - component: {fileID: 2217311349632631334}
   - component: {fileID: 1303822018347656461}
   - component: {fileID: 596419396138107355}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -200,7 +200,7 @@ SpriteRenderer:
   m_SmallMeshCulling: 1
   m_ForceMeshLod: -1
   m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 5
+  m_RenderingLayerMask: 65
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
@@ -317,17 +317,17 @@ MonoBehaviour:
   sp: {fileID: 2095623651001216604}
   interactRayInclude:
     serializedVersion: 2
-    m_Bits: 576
+    m_Bits: 3520
   personalCamera: {fileID: 6612292125278352369}
   boardedMask:
     serializedVersion: 2
-    m_Bits: 759
+    m_Bits: 4087
   AllRenderMask:
     serializedVersion: 2
     m_Bits: 4294967295
   shipCeilingMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 57344
 --- !u!114 &596419396138107355
 MonoBehaviour:
   m_ObjectHideFlags: 0

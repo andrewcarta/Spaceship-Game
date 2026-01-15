@@ -16,16 +16,16 @@ TagManager:
   - 
   - Water
   - UI
-  - Structure Bases
+  - Mega Structure Base
+  - Large Structure Base
+  - Structure Base
   - Player
-  - Structure Top
   - Interactable
+  - NPC
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Structure Top
+  - Large Structure Top
+  - Mega Structure Top
   - 
   - 
   - 
@@ -48,9 +48,19 @@ TagManager:
     locked: 0
   m_RenderingLayers:
   - Default
-  - Structure Bases
+  - Background
+  - Anomalies
+  - Mega Structure Base
+  - Large Structure Base
+  - Structure Base
   - Player
+  - NPC
   - Small FX
   - Nodes
   - Structure Top
-  - Big FX
+  - Medium FX
+  - Large Structure Top
+  - Large FX
+  - Mega Structure Top
+  - Mega FX
+  - Overlay
