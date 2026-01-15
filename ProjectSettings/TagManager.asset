@@ -46,6 +46,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Exterior Lighting
+    uniqueID: 3524557007
+    locked: 0
+  - name: Interior Lighting
+    uniqueID: 472038117
+    locked: 0
   m_RenderingLayers:
   - Default
   - Background
