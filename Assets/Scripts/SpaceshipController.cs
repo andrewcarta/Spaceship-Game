@@ -120,7 +120,9 @@ public class ShipController : MonoBehaviour
         //? Used when a keyboard is used to pilot
         if (pilot.GetComponent<PlayerInput>().currentControlScheme.Equals("Keyboard"))
         {
-            transform.Rotate(0f,0f, Mathf.Clamp(-1 * move.x,-(int)(shipTurnSpeed),(int)(shipTurnSpeed)));
+            //x transform.Rotate(0f,0f, Mathf.Clamp(-1 * move.x,-(int)(shipTurnSpeed),(int)(shipTurnSpeed)));
+            rb.MoveRotation(Mathf.Clamp(-1 * move.x,-(int)(shipTurnSpeed),(int)(shipTurnSpeed)) + rb.rotation);
+            //? rb.AddTorque(shipTurnSpeed); - use to make turning with forces/ship have speed?(above appears to work)
             //applies a velocity on the ship pointing in the direction it is facing
             if (move.y != 0)
             {
@@ -152,7 +154,8 @@ public class ShipController : MonoBehaviour
                         rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus);
                         activateEngineParticles();
                     }
-                    transform.Rotate(0f, 0f,Mathf.Clamp(facingAndMove,-shipTurnSpeed,shipTurnSpeed));
+                    //x transform.Rotate(0f, 0f,Mathf.Clamp(facingAndMove,-shipTurnSpeed,shipTurnSpeed));
+                    rb.MoveRotation(Mathf.Clamp(facingAndMove,-shipTurnSpeed,shipTurnSpeed));
                 }
                 //if ship is facing down
                 if ((unitCircleAngle.value > 135 && unitCircleAngle.value <= 180) || (unitCircleAngle.value <= -135 && unitCircleAngle.value > -180))
@@ -162,7 +165,8 @@ public class ShipController : MonoBehaviour
                         rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus);
                         activateEngineParticles();
                     }
-                    transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -shipTurnSpeed, shipTurnSpeed));
+                    //x transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -shipTurnSpeed, shipTurnSpeed));
+                    rb.MoveRotation(Mathf.Clamp(facingAndMove,-shipTurnSpeed,shipTurnSpeed));
                 }
             //if ship is facing left
             if (unitCircleAngle.value > -135 && unitCircleAngle.value <= -45)
@@ -172,7 +176,8 @@ public class ShipController : MonoBehaviour
                         rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus);
                         activateEngineParticles();
                     }
-                    transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -shipTurnSpeed, shipTurnSpeed));
+                    //x transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -shipTurnSpeed, shipTurnSpeed));
+                    rb.MoveRotation(Mathf.Clamp(facingAndMove,-shipTurnSpeed,shipTurnSpeed));
                 }
             //if ship if facing right
             if ((unitCircleAngle.value > -45 && unitCircleAngle.value <= 0) || (unitCircleAngle.value >= 0 && unitCircleAngle.value <= 45))
@@ -182,7 +187,8 @@ public class ShipController : MonoBehaviour
                         rb.linearVelocity = transform.up * (int)(shipSpeed * boostBonus);
                         activateEngineParticles();
                     }
-                    transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -shipTurnSpeed, shipTurnSpeed));
+                    //x transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -shipTurnSpeed, shipTurnSpeed));
+                    rb.MoveRotation(Mathf.Clamp(facingAndMove,-shipTurnSpeed,shipTurnSpeed));
                 }
             }
             if (rb.linearVelocity == Vector2.zero) { deactivateEngineParticles(); }

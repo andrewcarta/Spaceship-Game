@@ -79,11 +79,13 @@ public class PlayerController : MonoBehaviour
     private void movePlayer(float delta)
     {
         Vector2 shipVelocity = Vector2.zero;
+        float shipAngVelocity = 0f;
         getCurrentShip();
         if (boardedShip)
         {
             shipScript = (ShipController)currentShip.GetComponent<MonoBehaviour>();
             shipVelocity = shipScript.getShipVelocity();
+            shipAngVelocity = shipScript.getShipAngVelocity();
         }
         move = playerInput.actions["PlayerMove"].ReadValue<Vector2>();
         //? The player can dash for 5 seconds and takes 5 secs to recharge but if only partially empty takes longer to charge
@@ -99,7 +101,9 @@ public class PlayerController : MonoBehaviour
         if (stamina >= 10) { stamina = 5; dashOnCooldown = false;}
 
         rb.linearVelocity = (move * (int)(stats.moveSpeed)) + shipVelocity;
-        
+
+        //! HAS NOT BEEN TESTED TO WORK YET CAUSE I NEED TO USE A CONTROLLER
+        rb.angularDamping += shipAngVelocity;
     }
     private void rotateSprite() { 
         Vector2 thisPos = transform.position;
@@ -108,7 +112,8 @@ public class PlayerController : MonoBehaviour
         if (move != Vector2.zero)
         {
             float facingAndMove = Vector2.SignedAngle(transform.up, move);
-            transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -12, 12));
+            //x transform.Rotate(0f, 0f, Mathf.Clamp(facingAndMove, -12, 12));
+            rb.MoveRotation(Mathf.Clamp(facingAndMove, -12, 12)+rb.rotation);
         }
     }
 
