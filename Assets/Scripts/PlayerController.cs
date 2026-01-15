@@ -209,7 +209,7 @@ public class PlayerController : MonoBehaviour
                             transform.position = child.position; 
                             boardedShip = false;
                             this.transform.parent = null;
-                            print("<color=yellow> Exited" + parent.name);
+                            print("<color=yellow> Exited" + currentShip.name);
                         
                         
                     }
