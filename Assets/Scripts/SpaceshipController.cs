@@ -7,6 +7,7 @@ using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UIElements;
 //! example
 //? example
@@ -42,6 +43,7 @@ public class ShipController : MonoBehaviour
     private Transform pilotSeat;
     private GameObject pilot;
     private List<Transform> mainEngineSystem;
+    private Transform engineLightsSystem;
     private List<Transform> passengersList;
     private Vector2 lastVelocity;
     private float stamina = 10;
@@ -74,6 +76,14 @@ public class ShipController : MonoBehaviour
                 }
                 
             }
+            if(child.name.Contains("Engine Lights"))
+            {                
+                engineLightsSystem = child;
+            }
+        }
+        foreach (Transform specificLight in engineLightsSystem)
+        {
+            specificLight.GetComponent<Light2D>().intensity = 0;
         }
         deactivateEngineParticles();
         print("<color=green> " + this.name + " spawned at " + gameObject.transform.position.x + " " + gameObject.transform.position.y);
@@ -99,6 +109,7 @@ public class ShipController : MonoBehaviour
             //x simulateAngVelocity();
             lockPilotPos();
         }
+        powerEngineLights();
     }
     private void LateUpdate()
     { 
@@ -193,6 +204,7 @@ public class ShipController : MonoBehaviour
             }
             if (rb.linearVelocity == Vector2.zero) { deactivateEngineParticles(); }
         }
+        
     }
     private void boostMovement() {
         if (pilotInput.actions["BoostMovement"].IsPressed() && stamina >= 0 && move != Vector2.zero && !boostOnCooldown)
@@ -206,14 +218,19 @@ public class ShipController : MonoBehaviour
         if (boostOnCooldown == true) { if (stamina <= 0) { stamina = 0; } stamina += Time.deltaTime / 1f; }
         if (stamina >= 10) { stamina = 10; boostOnCooldown = false; }
     }
-    /*
-    private void simulateAngVelocity() {
-        currentAngle = transform.eulerAngles.z;
-        float deltaAngle = Mathf.DeltaAngle(lastAngle, currentAngle);
-        float angVelocity =  deltaAngle / Time.fixedDeltaTime;
-        rb.angularVelocity = angVelocity;
-        lastAngle = currentAngle;
-    }*/
+    private void powerEngineLights()
+    {
+        float lightIntensity = (int)(rb.linearVelocity.magnitude/shipSpeed)*5;
+        //Boost bonus is technically applied because we don't divide by it
+        //the *5 is the intensity that should be normally good
+        foreach (Transform specificLight in engineLightsSystem)
+        {
+            specificLight.GetComponent<Light2D>().intensity = Mathf.Clamp(lightIntensity,0,1);
+        }
+        
+
+    }
+
 
     //TODO Finish this and make it work properly so player isn't moved weirdly in the ship
     public Vector2 getShipVelocity() {

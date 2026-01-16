@@ -46,11 +46,29 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Exterior Lighting
+  - name: Mega Under
+    uniqueID: 390189683
+    locked: 0
+  - name: Large Under
+    uniqueID: 2504307309
+    locked: 0
+  - name: Medium Under
+    uniqueID: 472038117
+    locked: 0
+  - name: Nodes
+    uniqueID: 128437911
+    locked: 0
+  - name: Characters
+    uniqueID: 3939274019
+    locked: 0
+  - name: Exterior Top
     uniqueID: 3524557007
     locked: 0
-  - name: Interior Lighting
-    uniqueID: 472038117
+  - name: Large Top
+    uniqueID: 4199401823
+    locked: 0
+  - name: Mega Top
+    uniqueID: 1511543847
     locked: 0
   m_RenderingLayers:
   - Default
