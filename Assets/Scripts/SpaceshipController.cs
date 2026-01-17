@@ -81,9 +81,12 @@ public class ShipController : MonoBehaviour
                 engineLightsSystem = child;
             }
         }
-        foreach (Transform specificLight in engineLightsSystem)
+        if (engineLightsSystem != null)
         {
-            specificLight.GetComponent<Light2D>().intensity = 0;
+            foreach (Transform specificLight in engineLightsSystem)
+            {
+                specificLight.GetComponent<Light2D>().intensity = 0;
+            }
         }
         deactivateEngineParticles();
         print("<color=green> " + this.name + " spawned at " + gameObject.transform.position.x + " " + gameObject.transform.position.y);
