@@ -53,7 +53,8 @@ public class PlayerController : MonoBehaviour
         lastPos = transform.position;
         boardedShip = false;
         piloting = false;
-        
+        getCurrentShip();
+        cameraLayerRenderSet();
         move = Vector2.zero;
         print("<color=green> Player Spawned at "+gameObject.transform.position.x+" "+ gameObject.transform.position.y);
     }
@@ -65,22 +66,24 @@ public class PlayerController : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        cameraLayerRenderSet();
-        getCurrentShip();
+        
         movePlayer(Time.deltaTime);
         rotateSprite();
         targetRaycasts();
         checkRaycastContext();
         lastPos = transform.position;
     }
-    private void LateUpdate() { }
+    private void LateUpdate() 
+    {
+        getCurrentShip();
+        cameraLayerRenderSet();
+    }
 
 
     private void movePlayer(float delta)
     {
         Vector2 shipVelocity = Vector2.zero;
         float shipAngVelocity = 0f;
-        getCurrentShip();
         if (boardedShip)
         {
             shipScript = (ShipController)currentShip.GetComponent<MonoBehaviour>();
@@ -188,10 +191,30 @@ public class PlayerController : MonoBehaviour
                 GameObject hitShip = mostRecentHit.transform.parent.gameObject;
                 print("Entering " +hitShip.name);
                 shipScript = (ShipController)hitShip.GetComponent<MonoBehaviour>();
-                foreach(Transform child in hitShip.transform) {
-                    if (child.CompareTag("Point") && child.gameObject.name.Contains("EntryPoint")) { 
-                    this.transform.position = child.transform.position;
-                    boardedShip = true;
+                int entranceNumber = 0;
+                if (interactRayCollider.gameObject.name.Contains("_"))
+                {
+                    entranceNumber = Convert.ToInt32(interactRayCollider.gameObject.name.PartAfter('_'));
+                }
+                foreach (Transform child in hitShip.transform) {
+                    if (child.CompareTag("Point") && child.gameObject.name.Contains("EntryPoint")) {
+                        //? code for multiple entrances(checks if has _ which denotes multientrance and looks for entrance with same number)
+                        if (entranceNumber!=0) {
+                            if (Convert.ToInt32(child.name.PartAfter('_')) == entranceNumber)
+                            {
+                                this.transform.position = child.transform.position;
+                                boardedShip = true;
+                            }
+                            else {
+                                print("Not this entrance");
+                            }
+                            
+                        }
+                        else
+                        {
+                            this.transform.position = child.transform.position;
+                            boardedShip = true;
+                        }
                     }
                 
                 }
@@ -203,6 +226,11 @@ public class PlayerController : MonoBehaviour
             if (interactRayCollider.gameObject.name.Contains("ExitArea")) { 
                 shipScript = (ShipController)currentShip.GetComponent<MonoBehaviour>();
                 shipScript.removePassenger(this.transform);
+                int exitNumber = 0;
+                if (interactRayCollider.gameObject.name.Contains("_"))
+                {
+                    exitNumber = Convert.ToInt32(interactRayCollider.gameObject.name.PartAfter('_'));
+                }
                 foreach (Transform child in currentShip.transform)
                 {
                     if (child.CompareTag("Point") && child.gameObject.name.Contains("ExitPoint")) { 
@@ -210,11 +238,27 @@ public class PlayerController : MonoBehaviour
                         RaycastHit2D exitChecker = Physics2D.Raycast(child.transform.position, child.transform.position, 2, interactRayInclude);
                         if(exitChecker.collider != null){print("Player shouldn't exit"); }
                         //else{}
-                        //! Currently the code is giving false positives and that needs to be fixed(due to space being there[make a new mask elxuding supership stuff mebe?])
-                            transform.position = child.position; 
+                        //! ^^^ Currently the code is giving false positives and that needs to be fixed(due to space being there[make a new mask elxuding supership stuff mebe?])
+                        if (exitNumber != 0)
+                        {
+                            if (Convert.ToInt32(child.name.PartAfter('_')) == exitNumber)
+                            {
+                                this.transform.position = child.transform.position;
+                                boardedShip = false;
+                            }
+                            else
+                            {
+                                print("Not this exit");
+                            }
+
+                        }
+                        else
+                        {
+                            this.transform.position = child.transform.position;
                             boardedShip = false;
-                            this.transform.parent = null;
-                            print("<color=yellow> Exited" + currentShip.name);
+                        }
+                        this.transform.parent = null;
+                        print("<color=yellow> Exited" + currentShip.name);
                         
                         
                     }
@@ -247,14 +291,16 @@ public class PlayerController : MonoBehaviour
             if (ray.collider != null)
             {
                 currentShip = ray.collider.transform.parent.gameObject;
+                boardedShip = true;
                 shipScript = (ShipController)currentShip.GetComponent<MonoBehaviour>();
                 //!? debug print(currentShip.name);
+                cameraLayerRenderSet();
                 return currentShip;
             }
-            else { if (!piloting) { return currentShip; }
-                else { shipScript = null; currentShip = null; return null; } }
+            else { if (!piloting) { cameraLayerRenderSet(); return currentShip; }
+                else { shipScript = null; currentShip = null; boardedShip = false; cameraLayerRenderSet(); return null; } }
         }
-        else { return currentShip; }
+        else { cameraLayerRenderSet(); return currentShip; }
         //! LayerMask(256)
         /*
         if (boardedShip) { 
@@ -271,12 +317,10 @@ public class PlayerController : MonoBehaviour
     {
         if (boardedShip) 
         {
+            personalCamera.cullingMask = boardedMask;
             if (piloting) 
             {
                 personalCamera.cullingMask = AllRenderMask;
-            }
-            else {
-                personalCamera.cullingMask = boardedMask; 
             }
         }
         else { personalCamera.cullingMask = AllRenderMask; }
