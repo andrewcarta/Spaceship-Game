@@ -25,7 +25,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private RaycastHit2D interactRay;
     [SerializeField] private LayerMask interactRayInclude;
     [SerializeField] private Camera personalCamera;
-    [SerializeField] private LayerMask boardedMask;
+    [SerializeField] private LayerMask boardedMaskMediumShip;
+    [SerializeField] private LayerMask boardedMaskLargeShip;
+    [SerializeField] private LayerMask boardedMaskMegaShip;
     [SerializeField] private LayerMask AllRenderMask;
     [SerializeField] private LayerMask shipCeilingMask;
 
@@ -53,9 +55,9 @@ public class PlayerController : MonoBehaviour
         lastPos = transform.position;
         boardedShip = false;
         piloting = false;
-        getCurrentShip();
-        cameraLayerRenderSet();
         move = Vector2.zero;
+        transform.position = rb.position;
+        cameraLayerRenderSet();
         print("<color=green> Player Spawned at "+gameObject.transform.position.x+" "+ gameObject.transform.position.y);
     }
 
@@ -75,7 +77,6 @@ public class PlayerController : MonoBehaviour
     }
     private void LateUpdate() 
     {
-        getCurrentShip();
         cameraLayerRenderSet();
     }
 
@@ -86,7 +87,8 @@ public class PlayerController : MonoBehaviour
         float shipAngVelocity = 0f;
         if (boardedShip)
         {
-            shipScript = (ShipController)currentShip.GetComponent<MonoBehaviour>();
+            cameraLayerRenderSet();
+            shipScript = currentShip.GetComponent<ShipController>();
             shipVelocity = shipScript.getShipVelocity();
             shipAngVelocity = shipScript.getShipAngVelocity();
         }
@@ -96,7 +98,8 @@ public class PlayerController : MonoBehaviour
         {
             //TODO Add some particles for this
             stamina -= Time.deltaTime;
-            move *= 2;
+            move.y *= 2;
+            move.x *= 2;
         }
         else { if (stamina < 10) { stamina += Time.deltaTime / 1.25f; } }
         if (stamina <= 0) { dashOnCooldown = true;}
@@ -180,9 +183,6 @@ public class PlayerController : MonoBehaviour
         {
             print(interactRayCollider.gameObject.name);
             if (interactRayCollider.gameObject.name.Contains("EnterArea")) {
-
-                //! TO rework for full physics give the ShipController class this object with a method to add them to an array of boarded people
-                //! Also save the shipScript as a class var in player class for getting rb physics
                 /*
                 gets the parent of the interaction point by using transform component
                 brings the player into the ship on the ship entry point's coords
@@ -190,7 +190,7 @@ public class PlayerController : MonoBehaviour
                 */
                 GameObject hitShip = mostRecentHit.transform.parent.gameObject;
                 print("Entering " +hitShip.name);
-                shipScript = (ShipController)hitShip.GetComponent<MonoBehaviour>();
+                shipScript = hitShip.GetComponent<ShipController>();
                 int entranceNumber = 0;
                 if (interactRayCollider.gameObject.name.Contains("_"))
                 {
@@ -224,7 +224,7 @@ public class PlayerController : MonoBehaviour
             }
 
             if (interactRayCollider.gameObject.name.Contains("ExitArea")) { 
-                shipScript = (ShipController)currentShip.GetComponent<MonoBehaviour>();
+                shipScript = currentShip.GetComponent<ShipController>();
                 shipScript.removePassenger(this.transform);
                 int exitNumber = 0;
                 if (interactRayCollider.gameObject.name.Contains("_"))
@@ -263,13 +263,12 @@ public class PlayerController : MonoBehaviour
                         
                     }
                 }
-                
             }
 
             if (interactRayCollider.gameObject.name.Contains("ShipControls")) {
                 //! This is diff from exit and enter if statements so it will swap from player controller to ship controller
                 //? Collects the ship's script to use for the player to pilot the ship
-                shipScript = (ShipController)currentShip.GetComponent<MonoBehaviour>();
+                shipScript = currentShip.GetComponent<ShipController>();
                 //TODO Change the code so the ship only overrides the player controls when they are piloting and it adds/subtrascts them from the list when it is piloted/unpiloted
                 shipScript.enabled = true;
                 print("Debug: enabled spaceshipController script");
@@ -280,27 +279,43 @@ public class PlayerController : MonoBehaviour
                 print("Debug: PlayerController deactivated");
             }
 
+            if (interactRayCollider.gameObject.name.Contains("Turret")){
+                //piloting is used for controlling anything
+                if (!piloting)
+                {
+                    //provides the turret with access the player's transform and rb
+                    interactRayCollider.gameObject.GetComponent<TurretController>().controlTurret(this.transform);
+                    piloting = true;
+                }
+                else
+                {
+                    //dismounts the player from the turret
+                    interactRayCollider.gameObject.GetComponent<TurretController>().dismountTurret();
+                    piloting = false;
+                }
+                
 
+            }
         }}
 
     private void OnBoostedMovement(InputAction.CallbackContext context) { }
 
     public GameObject getCurrentShip() {
+        //This method is only called in cameraRenderLayerSet() so it doesn't run that code in itself
         if (Mathf.Abs(lastPos.x-transform.position.x) > 0.01 && Mathf.Abs(lastPos.y - transform.position.y) > 0.01) {
             RaycastHit2D ray = Physics2D.Raycast(transform.position, transform.position, 1, shipCeilingMask);
             if (ray.collider != null)
             {
                 currentShip = ray.collider.transform.parent.gameObject;
                 boardedShip = true;
-                shipScript = (ShipController)currentShip.GetComponent<MonoBehaviour>();
+                shipScript = currentShip.GetComponent<ShipController>();
                 //!? debug print(currentShip.name);
-                cameraLayerRenderSet();
                 return currentShip;
             }
-            else { if (!piloting) { cameraLayerRenderSet(); return currentShip; }
-                else { shipScript = null; currentShip = null; boardedShip = false; cameraLayerRenderSet(); return null; } }
+            else { if (!piloting) { return currentShip; }
+                else { shipScript = null; currentShip = null; boardedShip = false; return null; } }
         }
-        else { cameraLayerRenderSet(); return currentShip; }
+        else { return currentShip; }
         //! LayerMask(256)
         /*
         if (boardedShip) { 
@@ -315,9 +330,13 @@ public class PlayerController : MonoBehaviour
     
     private void cameraLayerRenderSet()
     {
+        getCurrentShip();
         if (boardedShip) 
         {
-            personalCamera.cullingMask = boardedMask;
+            //ship scale 1 is medium, 2 is large and 3 is mega 
+            personalCamera.cullingMask = boardedMaskMediumShip;
+            if(shipScript.getScale() == 2){personalCamera.cullingMask = boardedMaskLargeShip;}
+            if(shipScript.getScale() == 3){personalCamera.cullingMask = boardedMaskMegaShip;}
             if (piloting) 
             {
                 personalCamera.cullingMask = AllRenderMask;

@@ -338,8 +338,8 @@ public class ShipController : MonoBehaviour
     private void lockPilotPos() {
         if (pilotSeat != null && pilot != null)
         {
-            pilot.transform.position = pilotSeat.position;
-            pilot.transform.rotation = this.transform.rotation;
+            pilot.GetComponent<Rigidbody2D>().position = pilotSeat.position;
+            pilot.GetComponent<Rigidbody2D>().rotation = rb.rotation;
             pilot.GetComponent<Rigidbody2D>().linearVelocity = rb.linearVelocity;
             pilot.GetComponent<Rigidbody2D>().angularVelocity = rb.angularVelocity;
         }

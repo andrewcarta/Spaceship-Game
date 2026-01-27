@@ -319,9 +319,15 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 3520
   personalCamera: {fileID: 6612292125278352369}
-  boardedMask:
+  boardedMaskMediumShip:
     serializedVersion: 2
     m_Bits: 4087
+  boardedMaskLargeShip:
+    serializedVersion: 2
+    m_Bits: 12279
+  boardedMaskMegaShip:
+    serializedVersion: 2
+    m_Bits: 28663
   AllRenderMask:
     serializedVersion: 2
     m_Bits: 4294967295
