@@ -1445,6 +1445,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1169447467}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &570203615
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 570203616}
+  m_Layer: 0
+  m_Name: PilotSeat
+  m_TagString: Point
+  m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &570203616
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 570203615}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1189262688}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &573063480
 GameObject:
   m_ObjectHideFlags: 0
@@ -4625,9 +4656,9 @@ GameObject:
   - component: {fileID: 1189262686}
   - component: {fileID: 1189262685}
   - component: {fileID: 1189262684}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Turret Example
-  m_TagString: Untagged
+  m_TagString: Use
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4644,6 +4675,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54fd9de7bdaf8494fbb2ef282b8e9137, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  bulletPrefab: {fileID: 0}
+  pilotSeat: {fileID: 570203616}
 --- !u!58 &1189262685
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -4774,10 +4807,11 @@ Transform:
   m_GameObject: {fileID: 1189262683}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 36.23, y: 3.14109, z: 0}
+  m_LocalPosition: {x: 36, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 570203616}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1190877757
@@ -4900,7 +4934,7 @@ MonoBehaviour:
   spBase: {fileID: 1883063180}
   spTop: {fileID: 2146540419}
   shipControls: {fileID: 1842506750}
-  shipScale: 2
+  shipScale: 1
   shipSpeed: 35
   shipTurnSpeed: 5
   shipArmor: 5
@@ -5262,7 +5296,7 @@ MonoBehaviour:
   spBase: {fileID: 800900031}
   spTop: {fileID: 909659341}
   shipControls: {fileID: 0}
-  shipScale: 3
+  shipScale: 2
   shipSpeed: 0
   shipTurnSpeed: 0
   shipArmor: 100
